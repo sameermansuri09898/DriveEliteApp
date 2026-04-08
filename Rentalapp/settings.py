@@ -60,7 +60,7 @@ REST_FRAMEWORK = {
     ]
 }   
 
-
+AUTH_USER_MODEL = 'Account.CustomUser'
 ROOT_URLCONF = 'Rentalapp.urls'
 
 TEMPLATES = [
