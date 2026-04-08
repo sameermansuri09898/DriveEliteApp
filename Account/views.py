@@ -20,11 +20,12 @@ class LoginView(APIView):
     serializer.is_valid(raise_exception=True)
     user=authenticate(username=serializer.validated_data['username'],password=serializer.validated_data['password'])
     if user is not None:
-      credits,token=Token.objects.get_or_create(user=user)
-      if credits:
-        token.delete()
-        token=Token.objects.create(user=user)
-
-      return Response({"token":token.key},status=status.HTTP_200_OK)
+      token=Token.objects.get_or_create(user=user)
+      return Response({"token":token[0].key},status=status.HTTP_200_OK)
     return Response({"message":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
 
+class LogoutView(APIView):
+  def post(self,request):
+    token=Token.objects.get(user=request.user)
+    token.delete()
+    return Response({"message":"User logged out successfully"},status=status.HTTP_200_OK)

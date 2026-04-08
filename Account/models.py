@@ -8,7 +8,8 @@ class CustomUser(AbstractUser):
     image = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    role = models.CharField(max_length=10, default='customer')
 
     def __str__(self):
-        return self.username  
+        return self.username    
     

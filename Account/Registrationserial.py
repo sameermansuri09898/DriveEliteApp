@@ -2,21 +2,26 @@ from rest_framework import serializers
 from Account.models import CustomUser
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
     image = serializers.ImageField(required=False, allow_null=True) 
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'password', 'phone_number', 'address','image']
-        extra_kwargs = {
+        fields = ['username', 'email', 'password','confirm_password', 'phone_number', 'address','image','role']
+        extra_kwargs = {    
             'password': {'write_only': True},
+            'confirm_password': {'write_only': True},
             'image': {'required': False, 'allow_null': True}, 
         } 
 
-    def validate(self,data):
-      if data["password"] != data["confirm_password"]:
+    def validate(self, data):
+     password = data.get('password')
+     confirm_password = data.get('confirm_password')
+
+     if password != confirm_password:
         raise serializers.ValidationError("Passwords do not match")
-      return data
+
+     return data
     
     def validate_phone_number(self, value):
         if not value.isdigit() or len(value) != 10:
