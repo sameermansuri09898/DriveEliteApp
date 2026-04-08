@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Car Rental</title>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+    body{
+      background:#f4f6f9;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .container{
+      width:100%;
+      max-width:850px;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.1);
+      display:flex;
+      overflow:hidden;
+    }
+
+    .left{
+      background:#111;
+      color:#fff;
+      padding:40px;
+      width:45%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .left h2{font-size:28px;margin-bottom:10px}
+    .left p{opacity:0.8}
+
+    .right{
+      padding:40px;
+      width:55%;
+    }
+
+    .form-group{margin-bottom:15px}
+
+    .form-group input{
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+
+    .error{
+      color:red;
+      font-size:12px;
+      margin-top:3px;
+      display:block;
+    }
+
+    button{
+      width:100%;
+      padding:12px;
+      border:none;
+      background:#e60023;
+      color:#fff;
+      font-size:16px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    button:hover{background:#c4001d}
+
+    .extra{
+      margin-top:10px;
+      text-align:center;
+    }
+
+    .extra a{text-decoration:none;color:#e60023}
+
+    @media(max-width:768px){
+      .container{flex-direction:column}
+      .left, .right{width:100%}
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="left">
+    <h2>Welcome Back 🚗</h2>
+    <p>Login to continue your car rental journey</p>
+  </div>
+
+  <div class="right">
+    <form id="loginForm">
+
+      <div class="form-group">
+        <input type="text" name="username" placeholder="Username" required>
+        <small class="error" id="error-username"></small>
+      </div>
+
+      <div class="form-group">
+        <input type="password" name="password" placeholder="Password" required>
+        <small class="error" id="error-password"></small>
+      </div>
+
+      <button type="submit">Login</button>
+
+      <div class="extra">
+        Don't have an account? <a href="#">Register</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('loginForm');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/login/', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert('Login Successful ✅');
+
+      // store token (if using token auth)
+      if(data.token){
+        console.log(data.token);
+        localStorage.setItem('token', data.token);
+      }
+
+      // redirect (optional)
+      window.location.href = 'home.html';
+
+    } else {
+      showErrors(data);
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert('Server error ❌');
+  }
+});
+
+function showErrors(errors) {
+  document.querySelectorAll('.error').forEach(el => el.innerText = '');
+
+  if(errors.detail){
+    alert(errors.detail);
+    return;
+  }
+
+  for (let key in errors) {
+    let field = document.getElementById(`error-${key}`);
+    if (field) {
+      field.innerText = errors[key].join(', ');
+    }
+  }
+}
+</script>
+
+</body>
+</html>

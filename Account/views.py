@@ -4,7 +4,7 @@ from rest_framework import status
 from Account.Registrationserial import UserRegistrationSerializer, LoginSerializer 
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token 
-
+from rest_framework.permissions import IsAuthenticated
 
 class RegistrationView(APIView):
   def post(self,request):
@@ -25,6 +25,7 @@ class LoginView(APIView):
     return Response({"message":"Invalid credentials"},status=status.HTTP_401_UNAUTHORIZED)
 
 class LogoutView(APIView):
+  permission_classes=[IsAuthenticated]
   def post(self,request):
     token=Token.objects.get(user=request.user)
     token.delete()

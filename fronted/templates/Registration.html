@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - Car Rental</title>
+
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+    body{
+      background:#f4f6f9;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+
+    .container{
+      width:100%;
+      max-width:900px;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.1);
+      display:flex;
+      overflow:hidden;
+    }
+
+    .left{
+      background:#111;
+      color:#fff;
+      padding:40px;
+      width:40%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .left h2{font-size:28px;margin-bottom:10px}
+    .left p{opacity:0.8}
+
+    .right{
+      padding:40px;
+      width:60%;
+    }
+
+    .form-group{margin-bottom:15px}
+
+    .form-group input, .form-group select{
+      width:100%;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:6px;
+    }
+
+    .error{
+      color:red;
+      font-size:12px;
+      margin-top:3px;
+      display:block;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+    }
+
+    .row .form-group{flex:1}
+
+    button{
+      width:100%;
+      padding:12px;
+      border:none;
+      background:#e60023;
+      color:#fff;
+      font-size:16px;
+      border-radius:6px;
+      cursor:pointer;
+    }
+
+    button:hover{background:#c4001d}
+
+    .login-link{
+      margin-top:10px;
+      text-align:center;
+    }
+
+    .login-link a{text-decoration:none;color:#e60023}
+
+    @media(max-width:768px){
+      .container{flex-direction:column}
+      .left, .right{width:100%}
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="left">
+    <h2>Car Rental</h2>
+    <p>Create your account and start booking your dream car 🚗</p>
+    <p id="error-confirm_password_matched" style="color: red;"></p>
+  </div>
+
+  <div class="right">
+    <form id="registerForm">
+
+      <div class="row">
+        <div class="form-group">
+          <input type="text" name="username" placeholder="Username" required>
+          <small class="error" id="error-username"></small>
+        </div>
+
+        <div class="form-group">
+          <input type="email" name="email" placeholder="Email" required>
+          <small class="error" id="error-email"></small>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <input type="password" name="password" placeholder="Password" required>
+          <small class="error" id="error-password"></small>
+        </div>
+
+        <div class="form-group">
+          <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+          <small class="error" id="error-confirm_password"></small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="phone_number" placeholder="Phone Number" required>
+        <small class="error" id="error-phone_number"></small>
+      </div>
+
+      <div class="form-group">
+        <input type="text" name="address" placeholder="Address" required>
+        <small class="error" id="error-address"></small>
+      </div>
+
+      <div class="form-group">
+        <input type="file" name="image" accept="image/*">
+        <small class="error" id="error-image"></small>
+      </div>
+
+      <div class="form-group">
+        <select name="role" required>
+          <option value="">Select Role</option>
+          <option value="customer">Customer</option>
+          <option value="admin">SaleDept</option>
+          <option value="admin">Owner</option>
+        </select>
+        <small class="error" id="error-role"></small>
+      </div>
+
+      <button type="submit">Register</button>
+
+      <div class="login-link">
+        Already have an account? <a href="#" onclick="window.location.href='Login.html'">Login</a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('registerForm');
+
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch('http://127.0.0.1:8000/api/register/', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert('Registration Successful ✅');
+      form.reset();
+      clearErrors();
+    } else {
+      showErrors(data);
+    }
+
+  } catch (error) {
+    console.error(error);
+    alert('Server error ❌');
+  }
+});
+
+function clearErrors(){
+  document.querySelectorAll('.error').forEach(el => el.innerText = '');
+}
+
+function showErrors(errors) {
+  clearErrors();
+
+  for (let key in errors) {
+    let field = document.getElementById(`error-${key}`);
+
+    if (field) {
+      field.innerText = errors[key].join(', ');
+    }
+  }
+}
+</script>
+
+</body>
+</html>

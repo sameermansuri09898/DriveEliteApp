@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DriveElite — Luxury Car Booking</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0d1b2a;
+    --navy-mid: #16273a;
+    --navy-light: #1e3a50;
+    --gold: #e8b84b;
+    --gold-light: #f5c96a;
+    --red: #e84b4b;
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --gray-light: #eef0f3;
+    --gray-mid: #9aa3ae;
+    --gray-dark: #4a5568;
+    --text-main: #0d1b2a;
+    --text-muted: #6b7280;
+    --border: rgba(0,0,0,0.08);
+    --shadow-sm: 0 2px 12px rgba(0,0,0,0.06);
+    --shadow-md: 0 8px 32px rgba(0,0,0,0.1);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+    --radius-pill: 50px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text-main);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── NAVBAR ─── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    height: 70px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: box-shadow 0.3s;
+  }
+  .nav.scrolled { box-shadow: var(--shadow-md); }
+
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--navy);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .logo-icon svg { width: 22px; height: 22px; fill: var(--gold); }
+  .logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px; font-weight: 700;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+  }
+  .logo-text span { color: var(--gold); }
+
+  .nav-center {
+    flex: 1; max-width: 340px;
+    margin: 0 24px;
+    display: flex; align-items: center;
+    background: var(--gray-light);
+    border-radius: var(--radius-pill);
+    padding: 9px 18px; gap: 10px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .nav-center:focus-within {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+  .nav-center svg { width: 16px; height: 16px; fill: var(--gray-mid); flex-shrink: 0; }
+  .nav-center input {
+    border: none; background: transparent; outline: none;
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    color: var(--text-main); width: 100%;
+  }
+  .nav-center input::placeholder { color: var(--gray-mid); }
+
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+
+  .btn-contact {
+    background: var(--navy);
+    color: var(--white);
+    border: none; cursor: pointer;
+    padding: 10px 22px;
+    border-radius: var(--radius-pill);
+    font-size: 13px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-contact:hover { background: var(--navy-light); transform: translateY(-1px); }
+
+  .btn-hamburger {
+    width: 38px; height: 38px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 4px;
+  }
+  .btn-hamburger span {
+    display: block; width: 16px; height: 2px;
+    background: var(--navy); border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    background: var(--navy);
+    display: flex; align-items: center;
+    padding: 100px 5% 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(232,184,75,0.06);
+    animation: pulse 6s ease-in-out infinite;
+  }
+  .hero-bg-circle:nth-child(1) { width: 600px; height: 600px; top: -200px; right: -100px; }
+  .hero-bg-circle:nth-child(2) { width: 400px; height: 400px; bottom: -100px; left: -50px; animation-delay: 2s; }
+  .hero-grid-line {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.08); opacity: 0.7; }
+  }
+
+  .hero-inner {
+    display: flex; align-items: center;
+    gap: 60px; width: 100%; max-width: 1200px;
+    margin: 0 auto; position: relative; z-index: 2;
+  }
+  .hero-content { flex: 1; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(232,184,75,0.15);
+    border: 1px solid rgba(232,184,75,0.3);
+    padding: 6px 16px; border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 600;
+    color: var(--gold); text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 24px;
+  }
+  .hero-eyebrow::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--gold); border-radius: 50%;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5.5vw, 68px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.08;
+    margin-bottom: 22px;
+    letter-spacing: -1px;
+  }
+  .hero h1 .gold { color: var(--gold); }
+  .hero h1 .outline {
+    -webkit-text-stroke: 1.5px var(--white);
+    color: transparent;
+  }
+
+  .hero-desc {
+    color: rgba(255,255,255,0.55);
+    font-size: 16px;
+    line-height: 1.75;
+    max-width: 420px;
+    margin-bottom: 36px;
+  }
+  .hero-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    border: none; cursor: pointer;
+    padding: 15px 36px;
+    border-radius: var(--radius-pill);
+    font-size: 15px; font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.25s;
+    box-shadow: 0 4px 20px rgba(232,184,75,0.4);
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,184,75,0.5); }
+  .btn-primary svg { width: 16px; height: 16px; fill: var(--navy); transition: transform 0.2s; }
+  .btn-primary:hover svg { transform: translateX(3px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    color: var(--white); cursor: pointer;
+    padding: 14px 28px;
+    border-radius: var(--radius-pill);
+    font-size: 15px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 10px;
+    transition: all 0.25s;
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-ghost svg { width: 28px; height: 28px; fill: var(--white); border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3); padding: 6px; transition: fill 0.2s; }
+  .btn-ghost:hover svg { fill: var(--gold); }
+
+  .hero-thumbs { display: flex; gap: 8px; margin-top: 40px; }
+  .thumb-car {
+    width: 64px; height: 44px;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .thumb-car:hover, .thumb-car.active { border-color: var(--gold); background: rgba(232,184,75,0.12); }
+  .thumb-car svg { width: 38px; height: 22px; }
+
+  .hero-visual { flex: 1; display: flex; justify-content: flex-end; min-width: 320px; }
+  .car-showcase {
+    position: relative; width: 100%; max-width: 560px;
+  }
+  .car-main-svg { width: 100%; filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5)); }
+
+  .float-badge {
+    position: absolute;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    box-shadow: var(--shadow-lg);
+    animation: float 4s ease-in-out infinite;
+    white-space: nowrap;
+  }
+  .float-badge.top { top: 10px; right: 10px; animation-delay: 0s; }
+  .float-badge.bottom { bottom: 30px; left: -20px; animation-delay: 2s; }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .badge-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block; margin-right: 6px; }
+  .badge-label { font-size: 11px; color: var(--text-muted); display: block; }
+  .badge-value { font-size: 15px; font-weight: 700; color: var(--navy); }
+  .badge-price { font-size: 13px; font-weight: 700; color: var(--gold); }
+
+  /* ─── STATS ─── */
+  .stats-bar {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-light);
+  }
+  .stats-inner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1200px; margin: 0 auto;
+  }
+  .stat-item {
+    padding: 28px 20px;
+    text-align: center;
+    border-right: 1px solid var(--gray-light);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px; font-weight: 700;
+    color: var(--navy);
+  }
+  .stat-number span { color: var(--gold); }
+  .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── SECTION BASE ─── */
+  .section { padding: 80px 5%; }
+  .section-header { text-align: center; margin-bottom: 48px; }
+  .section-tag {
+    display: inline-block;
+    background: rgba(232,184,75,0.12);
+    color: #a07800;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: var(--radius-pill);
+    margin-bottom: 14px;
+  }
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 800; color: var(--navy);
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+  }
+  .section-header p {
+    font-size: 15px; color: var(--text-muted);
+    max-width: 500px; margin: 0 auto; line-height: 1.7;
+  }
+
+  /* ─── FILTER TABS ─── */
+  .filter-wrap { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
+  .filter-tab {
+    padding: 9px 22px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--gray-light);
+    background: var(--white);
+    font-size: 13px; font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  #logoutLink,
+#profileLink,
+#bookingLink,
+#wishlistLink {
+  display: none;
+}
+  .filter-tab:hover { border-color: var(--navy); color: var(--navy); }
+  .filter-tab.active { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .filter-tab.active-red { background: var(--red); border-color: var(--red); color: var(--white); }
+
+  /* ─── CAR CARDS ─── */
+  .cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .car-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--gray-light);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+  }
+  .car-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+  .car-card.dark { background: var(--navy); border-color: var(--navy-light); }
+
+  .card-img-wrap {
+    padding: 24px 24px 14px;
+    background: #f3f5f8;
+    position: relative;
+  }
+  .car-card.dark .card-img-wrap { background: var(--navy-mid); }
+
+  .card-top-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .brand-pill {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 700;
+    color: var(--navy);
+  }
+  .car-card.dark .brand-pill { color: var(--white); }
+  .brand-icon {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 1.5px solid var(--gray-light);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .brand-icon svg { width: 16px; height: 16px; }
+
+  .wishlist-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.85);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .wishlist-btn:hover { background: #fff0f0; transform: scale(1.1); }
+  .wishlist-btn svg { width: 14px; height: 14px; fill: #ddd; stroke: #ccc; stroke-width: 0.5; transition: all 0.2s; }
+  .wishlist-btn.liked svg { fill: var(--red); stroke: var(--red); }
+
+  .card-car-img {
+    height: 140px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .card-car-img svg { width: 100%; max-width: 220px; }
+
+  .card-body { padding: 18px 20px 20px; }
+  .card-name {
+    font-size: 17px; font-weight: 700;
+    color: var(--navy); margin-bottom: 3px;
+  }
+  .car-card.dark .card-name { color: var(--white); }
+  .card-sub { font-size: 12px; color: var(--text-muted); margin-bottom: 14px; }
+  .car-card.dark .card-sub { color: rgba(255,255,255,0.4); }
+
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--gray-light);
+    padding-top: 14px;
+  }
+  .car-card.dark .card-footer { border-color: rgba(255,255,255,0.08); }
+
+  .owner-row { display: flex; align-items: center; gap: 10px; }
+  .owner-ava {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--white);
+  }
+  .owner-name { font-size: 13px; font-weight: 600; color: var(--navy); }
+  .car-card.dark .owner-name { color: rgba(255,255,255,0.85); }
+  .owner-tag { font-size: 11px; color: var(--text-muted); }
+  .car-card.dark .owner-tag { color: rgba(255,255,255,0.35); }
+
+  .price-col { text-align: right; }
+  .disc-pill {
+    display: inline-block;
+    background: #fff0f0; color: var(--red);
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px;
+    margin-bottom: 3px;
+  }
+  .price-val {
+    font-size: 16px; font-weight: 800;
+    color: var(--navy);
+  }
+  .car-card.dark .price-val { color: var(--gold); }
+  .price-period { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+
+  .card-features {
+    display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap;
+  }
+  .feat-pill {
+    display: flex; align-items: center; gap: 4px;
+    background: var(--gray-light);
+    border-radius: 20px; padding: 4px 10px;
+    font-size: 11px; font-weight: 600; color: var(--gray-dark);
+  }
+  .feat-pill svg { width: 11px; height: 11px; fill: var(--gray-dark); }
+
+  /* ─── HOW IT WORKS ─── */
+  .hiw { background: var(--navy); }
+  .hiw .section-tag { background: rgba(232,184,75,0.15); color: var(--gold-light); }
+  .hiw .section-header h2 { color: var(--white); }
+  .hiw .section-header p { color: rgba(255,255,255,0.45); }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    max-width: 1200px; margin: 0 auto;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .step-card {
+    background: rgba(255,255,255,0.04);
+    padding: 36px 28px;
+    transition: background 0.3s;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+  }
+  .step-card:last-child { border-right: none; }
+  .step-card:hover { background: rgba(255,255,255,0.08); }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px; font-weight: 800;
+    color: rgba(232,184,75,0.2);
+    line-height: 1; margin-bottom: 16px;
+    transition: color 0.3s;
+  }
+  .step-card:hover .step-num { color: rgba(232,184,75,0.5); }
+  .step-icon {
+    width: 44px; height: 44px;
+    border-radius: var(--radius-sm);
+    background: rgba(232,184,75,0.12);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+  }
+  .step-icon svg { width: 20px; height: 20px; fill: var(--gold); }
+  .step-card h3 { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+  .step-card p { font-size: 14px; color: rgba(255,255,255,0.45); line-height: 1.65; }
+
+  /* ─── TESTIMONIALS ─── */
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .testi-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    border: 1px solid var(--gray-light);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .testi-stars { color: var(--gold); font-size: 16px; margin-bottom: 14px; letter-spacing: 2px; }
+  .testi-quote {
+    font-size: 14px; color: var(--text-muted);
+    line-height: 1.75; margin-bottom: 20px;
+    font-style: italic;
+  }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-ava {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--white);
+  }
+  .testi-name { font-size: 14px; font-weight: 700; color: var(--navy); }
+  .testi-role { font-size: 12px; color: var(--text-muted); }
+
+  /* ─── CTA BANNER ─── */
+  .cta-banner {
+    background: linear-gradient(135deg, var(--gold) 0%, #f5a623 100%);
+    padding: 80px 5%;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .cta-banner h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 800;
+    color: var(--navy);
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .cta-banner p {
+    font-size: 16px; color: rgba(13,27,42,0.65);
+    margin-bottom: 32px; position: relative;
+  }
+  .btn-cta {
+    background: var(--navy); color: var(--white);
+    border: none; cursor: pointer;
+    padding: 16px 44px;
+    border-radius: var(--radius-pill);
+    font-size: 16px; font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(13,27,42,0.3); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 60px 5% 0;
+  }
+  .footer-inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1200px; margin: 0 auto;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-brand-desc {
+    font-size: 14px; color: rgba(255,255,255,0.4);
+    line-height: 1.75; margin-top: 14px; margin-bottom: 24px;
+  }
+  .social-links { display: flex; gap: 10px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none;
+  }
+  .social-link:hover { border-color: var(--gold); background: rgba(232,184,75,0.1); }
+  .social-link svg { width: 16px; height: 16px; fill: rgba(255,255,255,0.5); }
+  .footer-col h4 {
+    font-size: 13px; font-weight: 700;
+    color: var(--white); text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 18px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li {
+    font-size: 14px; color: rgba(255,255,255,0.45);
+    margin-bottom: 10px; cursor: pointer;
+    transition: color 0.2s;
+  }
+  .footer-col li:hover { color: var(--gold); }
+
+  .footer-bottom {
+    background: rgba(0,0,0,0.2);
+    text-align: center; padding: 18px;
+    font-size: 13px; color: rgba(255,255,255,0.25);
+  }
+
+  /* ─── MOBILE MENU ─── */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 70px; left: 0; right: 0; bottom: 0;
+    background: rgba(13,27,42,0.98);
+    z-index: 998;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 28px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 24px; font-weight: 700;
+    color: var(--white); text-decoration: none;
+    font-family: 'Playfair Display', serif;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 960px) {
+    .hero-inner { flex-direction: column; text-align: center; gap: 40px; }
+    .hero-visual { min-width: auto; width: 100%; justify-content: center; }
+    .car-showcase { max-width: 420px; }
+    .hero-desc { margin-left: auto; margin-right: auto; }
+    .hero-actions { justify-content: center; }
+    .hero-thumbs { justify-content: center; }
+    .float-badge { display: none; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .stat-item:nth-child(2) { border-right: none; }
+    .footer-inner { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .nav-center { display: none; }
+    .btn-contact { display: none; }
+    .section { padding: 60px 4%; }
+    .hero { padding: 90px 4% 50px; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    .cars-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .step-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+    .footer-inner > div:first-child { display: none; }
+  }
+  .card-car-img{
+  height: 180px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(135deg,#f5f7fa,#e4e8ec);
+  border-radius: 12px;
+}
+
+.card-car-img img{
+  width: 90%;
+  height: auto;
+  object-fit: contain;
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="nav" id="navbar">
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
+    </div>
+    <span class="logo-text">Drive<span>Elite</span></span>
+  </a>
+  <div class="nav-center">
+    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    <input type="text" placeholder="Search your dream car...">
+  </div>
+  <div class="nav-right">
+    <button class="btn-contact">Contact Us</button>
+    <div class="btn-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#fleet">Our Fleet</a>
+  <a href="#how">How It Works</a>
+  <a href="#reviews">Reviews</a>
+
+  <!-- Auth Links -->
+  <a href="http://127.0.0.1:5500/fronted/templates/login.html" id="loginLink">Login</a>
+  <a href="http://127.0.0.1:5500/fronted/templates/Registration.html" id="registerLink">Register</a>
+  <a href="http://127.0.0.1:5500/fronted/templates/logout.html" id="logoutLink">Logout</a>
+
+  <!-- User Links -->
+  <a href="http://127.0.0.1:5500/fronted/templates/profile.html" id="profileLink">Profile</a>
+  <a href="http://127.0.0.1:5500/fronted/templates/booking.html" id="bookingLink">Booking</a>  
+  <a href="http://127.0.0.1:5500/fronted/templates/wishlist.html" id="wishlistLink">Wishlist</a>
+
+  <a href="#">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle"></div>
+  <div class="hero-bg-circle"></div>
+  <div class="hero-grid-line"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Premium Car Rental Service</div>
+      <h1>Here's Your<br><span class="gold">Car Booking</span><br><span class="outline">Of A Lifetime</span></h1>
+      <p class="hero-desc">Experience the ultimate in comfort, performance, and sophistication. From sleek sedans and stylish coupes to spacious SUVs and elegant convertibles.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">
+          Booking Now
+          <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+        </button>
+        <button class="btn-ghost">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          Watch Video
+        </button>
+      </div>
+      <div class="hero-thumbs">
+        <div class="thumb-car active">
+          <svg viewBox="0 0 80 40">
+            <path d="M8 28 Q15 18 28 15 L38 12 Q45 10 52 12 L68 18 Q76 22 77 30 L77 34 H8Z" fill="rgba(255,255,255,0.5)"/>
+            <circle cx="22" cy="34" r="5" fill="rgba(255,255,255,0.3)"/>
+            <circle cx="62" cy="34" r="5" fill="rgba(255,255,255,0.3)"/>
+          </svg>
+        </div>
+        <div class="thumb-car">
+          <svg viewBox="0 0 80 40">
+            <path d="M5 28 Q12 15 30 12 L45 10 Q55 10 65 16 L74 24 L75 34 H5Z" fill="rgba(255,255,255,0.5)"/>
+            <circle cx="18" cy="34" r="5" fill="rgba(255,255,255,0.3)"/>
+            <circle cx="62" cy="34" r="5" fill="rgba(255,255,255,0.3)"/>
+          </svg>
+        </div>
+        <div class="thumb-car">
+          <svg viewBox="0 0 80 40">
+            <path d="M6 30 Q10 20 24 16 L40 11 Q50 9 60 13 L72 20 Q78 26 78 32 L78 36 H6Z" fill="rgba(255,255,255,0.5)"/>
+            <circle cx="20" cy="36" r="5" fill="rgba(255,255,255,0.3)"/>
+            <circle cx="64" cy="36" r="5" fill="rgba(255,255,255,0.3)"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="car-showcase">
+        <div class="float-badge top">
+          <span><span class="badge-dot"></span><span class="badge-label">Status</span></span>
+          <span class="badge-value">Available Now</span>
+        </div>
+        <!-- MAIN HERO CAR SVG -->
+        <svg class="car-main-svg" viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="hbody" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#c8d0e0" stop-opacity="1"/>
+            </linearGradient>
+            <linearGradient id="hglass" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1a2a3a" stop-opacity="0.95"/>
+              <stop offset="100%" stop-color="#0d1b2a" stop-opacity="0.9"/>
+            </linearGradient>
+            <linearGradient id="hunder" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#9aa8b8" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#708090" stop-opacity="1"/>
+            </linearGradient>
+          </defs>
+          <!-- shadow -->
+          <ellipse cx="280" cy="262" rx="240" ry="18" fill="rgba(0,0,0,0.35)"/>
+          <!-- body -->
+          <path d="M55 195 Q70 148 128 136 L180 114 Q230 96 280 94 Q340 94 395 112 L455 136 Q505 155 512 195 L516 208 H44 Z" fill="url(#hbody)" stroke="#b0bac8" stroke-width="1.5"/>
+          <!-- cabin/glass -->
+          <path d="M152 136 L178 106 Q218 84 270 80 Q326 80 372 102 L410 130 Z" fill="url(#hglass)"/>
+          <!-- glass highlight -->
+          <path d="M158 132 L183 108 Q220 88 268 84 Q320 84 365 106 L400 126 Z" fill="rgba(255,255,255,0.06)"/>
+          <!-- inner glass division -->
+          <line x1="282" y1="82" x2="282" y2="132" stroke="rgba(255,255,255,0.15)" stroke-width="2"/>
+          <!-- body lower stripe -->
+          <path d="M55 195 Q60 192 120 190 L440 190 Q500 192 512 195" fill="none" stroke="#e8b84b" stroke-width="2" opacity="0.7"/>
+          <!-- underbody -->
+          <rect x="44" y="205" width="472" height="14" rx="5" fill="url(#hunder)"/>
+          <!-- front grille area -->
+          <path d="M44 205 L55 195 L70 195 L65 210 Z" fill="#0d1b2a"/>
+          <path d="M516 205 L505 195 L490 195 L495 210 Z" fill="#0d1b2a"/>
+          <!-- grille detail -->
+          <rect x="44" y="195" width="26" height="12" rx="3" fill="#1e3a50" opacity="0.8"/>
+          <rect x="490" y="195" width="26" height="12" rx="3" fill="#1e3a50" opacity="0.8"/>
+          <!-- front headlight -->
+          <path d="M48 183 L76 175 L78 195 L46 196 Z" fill="#f5e88a" opacity="0.9"/>
+          <path d="M50 184 L74 177 L76 192 L48 193 Z" fill="#fff9c4" opacity="0.6"/>
+          <!-- rear light -->
+          <path d="M484 178 L514 184 L514 196 L482 196 Z" fill="#c0392b" opacity="0.85"/>
+          <path d="M486 180 L512 186 L512 194 L484 194 Z" fill="#e84b4b" opacity="0.5"/>
+          <!-- wheels -->
+          <!-- front wheel -->
+          <circle cx="158" cy="218" r="46" fill="#1a1a2e" stroke="#2a2a3e" stroke-width="2"/>
+          <circle cx="158" cy="218" r="36" fill="#232336" stroke="#3a3a50" stroke-width="1.5"/>
+          <circle cx="158" cy="218" r="22" fill="#1a1a2e" stroke="#444460" stroke-width="2"/>
+          <circle cx="158" cy="218" r="8" fill="#2a2a3e"/>
+          <!-- spokes -->
+          <line x1="158" y1="196" x2="158" y2="240" stroke="#e8b84b" stroke-width="1.5"/>
+          <line x1="136" y1="218" x2="180" y2="218" stroke="#e8b84b" stroke-width="1.5"/>
+          <line x1="142" y1="202" x2="174" y2="234" stroke="#e8b84b" stroke-width="1.5"/>
+          <line x1="142" y1="234" x2="174" y2="202" stroke="#e8b84b" stroke-width="1.5"/>
+          <!-- rear wheel -->
+          <circle cx="402" cy="218" r="46" fill="#1a1a2e" stroke="#2a2a3e" stroke-width="2"/>
+          <circle cx="402" cy="218" r="36" fill="#232336" stroke="#3a3a50" stroke-width="1.5"/>
+          <circle cx="402" cy="218" r="22" fill="#1a1a2e" stroke="#444460" stroke-width="2"/>
+          <circle cx="402" cy="218" r="8" fill="#2a2a3e"/>
+          <line x1="402" y1="196" x2="402" y2="240" stroke="#e8b84b" stroke-width="1.5"/>
+          <line x1="380" y1="218" x2="424" y2="218" stroke="#e8b84b" stroke-width="1.5"/>
+          <line x1="386" y1="202" x2="418" y2="234" stroke="#e8b84b" stroke-width="1.5"/>
+          <line x1="386" y1="234" x2="418" y2="202" stroke="#e8b84b" stroke-width="1.5"/>
+          <!-- door lines -->
+          <line x1="228" y1="136" x2="222" y2="206" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+          <line x1="340" y1="134" x2="348" y2="206" stroke="rgba(0,0,0,0.12)" stroke-width="1.5"/>
+          <!-- handle -->
+          <rect x="247" y="172" width="28" height="6" rx="3" fill="rgba(0,0,0,0.15)"/>
+          <rect x="355" y="172" width="28" height="6" rx="3" fill="rgba(0,0,0,0.15)"/>
+        </svg>
+        <div class="float-badge bottom">
+          <span class="badge-label">Starting from</span>
+          <span class="badge-price">$6,250 / week</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-number">2,400<span>+</span></div><div class="stat-label">Luxury Vehicles</div></div>
+    <div class="stat-item"><div class="stat-number">98<span>%</span></div><div class="stat-label">Happy Clients</div></div>
+    <div class="stat-item"><div class="stat-number">150<span>+</span></div><div class="stat-label">Cities Covered</div></div>
+    <div class="stat-item"><div class="stat-number">12<span>yr</span></div><div class="stat-label">Experience</div></div>
+  </div>
+</div>
+
+<!-- CAR FLEET -->
+<section class="section" id="fleet" style="background:#f7f8fa">
+  <div class="section-header">
+    <div class="section-tag">Our Collection</div>
+    <h2>Our Popular Classic Cars</h2>
+    <p>Experience the ultimate in comfort, performance, and sophistication. From sleek sedans and stylish coupes to spacious SUVs.</p>
+  </div>
+  <div class="filter-wrap">
+    <div class="filter-tab active-red active" data-filter="all">All Type</div>
+    <div class="filter-tab" data-filter="sport">Sport</div>
+    <div class="filter-tab" data-filter="electric">Electric</div>
+    <div class="filter-tab" data-filter="sedan">Sedan</div>
+    <div class="filter-tab" data-filter="suv">SUV</div>
+    <div class="filter-tab" data-filter="classic">Classic</div>
+  </div>
+  <div class="cars-grid">
+
+    <!-- Card 1 -->
+    <div class="car-card" data-type="classic">
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            Mercury Comet
+          </div>
+          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        </div>
+        <div class="card-car-img">
+          
+          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercury Comet</div>
+        <div class="card-sub">Classic · 1965 · Petrol</div>
+        <div class="card-features">
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
+            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
+          </div>
+          <div class="price-col">
+            <div class="disc-pill">25% Off</div>
+            <div class="price-val">$6,250<span class="price-period">/week</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="car-card" data-type="classic">
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            Mercury Comet
+          </div>
+          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        </div>
+        <div class="card-car-img">
+     
+          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercury Comet</div>
+        <div class="card-sub">Classic · 1965 · Petrol</div>
+        <div class="card-features">
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
+            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
+          </div>
+          <div class="price-col">
+            <div class="disc-pill">25% Off</div>
+            <div class="price-val">$6,250<span class="price-period">/week</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="car-card" data-type="classic">
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            Mercury Comet
+          </div>
+          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        </div>
+        <div class="card-car-img">
+         
+          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercury Comet</div>
+        <div class="card-sub">Classic · 1965 · Petrol</div>
+        <div class="card-features">
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
+            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
+          </div>
+          <div class="price-col">
+            <div class="disc-pill">25% Off</div>
+            <div class="price-val">$6,250<span class="price-period">/week</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="car-card" data-type="classic">
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            Mercury Comet
+          </div>
+          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        </div>
+        <div class="card-car-img">
+          <!-- <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="120" cy="92" rx="100" ry="8" fill="rgba(0,0,0,0.08)"/>
+            <path d="M18 62 Q30 42 62 34 L84 26 Q105 22 122 26 L162 36 Q188 48 192 64 L193 72 H18Z" fill="#c0392b"/>
+            <path d="M64 34 L74 16 Q92 10 114 14 L148 28 L165 38Z" fill="#a93226"/>
+            <path d="M67 32 L77 17 Q93 12 112 15 L144 27 L160 36Z" fill="rgba(255,255,255,0.14)"/>
+            <rect x="16" y="69" width="178" height="10" rx="4" fill="#922b21"/>
+            <circle cx="46" cy="78" r="16" fill="#1a1a2e"/><circle cx="46" cy="78" r="11" fill="#2a2a3e"/><circle cx="46" cy="78" r="6" fill="#1a1a2e"/>
+            <circle cx="166" cy="78" r="16" fill="#1a1a2e"/><circle cx="166" cy="78" r="11" fill="#2a2a3e"/><circle cx="166" cy="78" r="6" fill="#1a1a2e"/>
+            <rect x="16" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
+            <rect x="181" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
+          </svg> -->
+          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercury Comet</div>
+        <div class="card-sub">Classic · 1965 · Petrol</div>
+        <div class="card-features">
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
+            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
+          </div>
+          <div class="price-col">
+            <div class="disc-pill">25% Off</div>
+            <div class="price-val">$6,250<span class="price-period">/week</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="car-card" data-type="classic">
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            Mercury Comet
+          </div>
+          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        </div>
+        <div class="card-car-img">
+         
+          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercury Comet</div>
+        <div class="card-sub">Classic · 1965 · Petrol</div>
+        <div class="card-features">
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
+            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
+          </div>
+          <div class="price-col">
+            <div class="disc-pill">25% Off</div>
+            <div class="price-val">$6,250<span class="price-period">/week</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="car-card" data-type="classic">
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">
+            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
+            Mercury Comet
+          </div>
+          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
+        </div>
+        <div class="card-car-img">
+          <!-- <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="120" cy="92" rx="100" ry="8" fill="rgba(0,0,0,0.08)"/>
+            <path d="M18 62 Q30 42 62 34 L84 26 Q105 22 122 26 L162 36 Q188 48 192 64 L193 72 H18Z" fill="#c0392b"/>
+            <path d="M64 34 L74 16 Q92 10 114 14 L148 28 L165 38Z" fill="#a93226"/>
+            <path d="M67 32 L77 17 Q93 12 112 15 L144 27 L160 36Z" fill="rgba(255,255,255,0.14)"/>
+            <rect x="16" y="69" width="178" height="10" rx="4" fill="#922b21"/>
+            <circle cx="46" cy="78" r="16" fill="#1a1a2e"/><circle cx="46" cy="78" r="11" fill="#2a2a3e"/><circle cx="46" cy="78" r="6" fill="#1a1a2e"/>
+            <circle cx="166" cy="78" r="16" fill="#1a1a2e"/><circle cx="166" cy="78" r="11" fill="#2a2a3e"/><circle cx="166" cy="78" r="6" fill="#1a1a2e"/>
+            <rect x="16" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
+            <rect x="181" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
+          </svg> -->
+          <img src="../images/car2.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Mercury Comet</div>
+        <div class="card-sub">Classic · 1965 · Petrol</div>
+        <div class="card-features">
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
+          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
+            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
+          </div>
+          <div class="price-col">
+            <div class="disc-pill">25% Off</div>
+            <div class="price-val">$6,250<span class="price-period">/week</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div style="text-align:center;margin-top:44px">
+    <button class="btn-primary" style="margin:0 auto;display:inline-flex">
+      View All Cars
+      <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+    </button>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section hiw" id="how">
+  <div class="section-header">
+    <div class="section-tag">Simple Process</div>
+    <h2>How It Works</h2>
+    <p>Book your dream car in just a few simple steps and enjoy a luxury experience from start to finish.</p>
+  </div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">01</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5z"/></svg>
+      </div>
+      <h3>Choose Your Car</h3>
+      <p>Browse our curated fleet of luxury and classic vehicles. Filter by type, brand, and budget to find your perfect match.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">02</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+      </div>
+      <h3>Book Online</h3>
+      <p>Select your dates, review exclusive discounts, and complete your reservation securely online in just minutes.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">03</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </div>
+      <h3>Get Confirmed</h3>
+      <p>Receive instant email confirmation with full details about your vehicle, pickup location, and 24/7 support contact.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">04</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/></svg>
+      </div>
+      <h3>Hit the Road</h3>
+      <p>Pick up your car, buckle up, and experience the ultimate in luxury and performance from the very first mile.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="reviews" style="background:#f7f8fa">
+  <div class="section-header">
+    <div class="section-tag">Client Stories</div>
+    <h2>What Our Clients Say</h2>
+    <p>Thousands of happy customers have made unforgettable memories with DriveElite.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Absolutely incredible experience. The Jaguar XK150 was immaculate and the entire booking process was seamless. Highly recommend for any special occasion!"</p>
+      <div class="testi-author">
+        <div class="testi-ava" style="background:#3b5bdb">SM</div>
+        <div><div class="testi-name">Sophia Martinez</div><div class="testi-role">Wedding Client</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Rented the Mustang GT500 for a weekend road trip. Pure luxury from pickup to drop-off. The team was professional and the car was in pristine condition."</p>
+      <div class="testi-author">
+        <div class="testi-ava" style="background:#0e7c5e">RC</div>
+        <div><div class="testi-name">Ryan Chen</div><div class="testi-role">Business Traveler</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"Used DriveElite for our corporate event. Three vehicles delivered perfectly on time. The discount pricing made it extremely affordable for our team."</p>
+      <div class="testi-author">
+        <div class="testi-ava" style="background:#a0522d">AP</div>
+        <div><div class="testi-name">Aisha Patel</div><div class="testi-role">Event Organizer</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <h2>Ready for the Ride of Your Life?</h2>
+  <p>Join over 2,400 satisfied clients and book your luxury car today.</p>
+  <button class="btn-cta">Book Your Car Now</button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="#" class="logo" style="display:inline-flex;margin-bottom:4px">
+        <div class="logo-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/></svg></div>
+        <span class="logo-text" style="color:#fff">Drive<span>Elite</span></span>
+      </a>
+      <p class="footer-brand-desc">The premier destination for luxury and classic car rentals. Experience the finest vehicles with unmatched, white-glove service.</p>
+      <div class="social-links">
+        <a class="social-link" href="#"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        <a class="social-link" href="#"><svg viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg></a>
+        <a class="social-link" href="#"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li>Home</li><li>About Us</li><li>Our Fleet</li><li>Pricing</li><li>Contact</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Car Types</h4>
+      <ul>
+        <li>Classic Cars</li><li>Sport Cars</li><li>Electric Cars</li><li>SUVs</li><li>Sedans</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li>+1 (800) 555-DRIVE</li>
+        <li>hello@driveelite.com</li>
+        <li>150+ Cities Worldwide</li>
+        <li>24/7 Support</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">© 2026 DriveElite. All rights reserved. &nbsp;|&nbsp; Privacy Policy &nbsp;|&nbsp; Terms of Service</div>
+
+<script>
+  const token = localStorage.getItem("token");
+
+// Elements
+const loginLink = document.getElementById("loginLink");
+const registerLink = document.getElementById("registerLink");
+const logoutLink = document.getElementById("logoutLink");
+
+const profileLink = document.getElementById("profileLink");
+const bookingLink = document.getElementById("bookingLink");
+const wishlistLink = document.getElementById("wishlistLink");
+
+// If user logged in
+if (token) {
+  loginLink.style.display = "none";
+  registerLink.style.display = "none";
+
+  logoutLink.style.display = "block";
+  profileLink.style.display = "block";
+  bookingLink.style.display = "block";
+  wishlistLink.style.display = "block";
+} 
+// If NOT logged in
+else {
+  logoutLink.style.display = "none";
+  profileLink.style.display = "none";
+  bookingLink.style.display = "none";
+  wishlistLink.style.display = "none";
+}
+  // Navbar scroll shadow
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  });
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // Filter tabs
+  document.querySelectorAll('.filter-tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active', 'active-red'));
+      this.classList.add('active');
+      if (this.dataset.filter === 'all') this.classList.add('active-red');
+
+      const filter = this.dataset.filter;
+      document.querySelectorAll('.car-card').forEach(card => {
+        if (filter === 'all' || card.dataset.type === filter) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+
+  // Wishlist toggle
+  document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('liked');
+    });
+  });
+
+  // Hero car thumbs
+  document.querySelectorAll('.thumb-car').forEach(thumb => {
+    thumb.addEventListener('click', function() {
+      document.querySelectorAll('.thumb-car').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Scroll reveal animation
+  const observerOptions = { threshold: 0.12, rootMargin: '0px 0px -40px 0px' };
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.car-card, .step-card, .testi-card, .stat-item').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(30px)';
+    el.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
