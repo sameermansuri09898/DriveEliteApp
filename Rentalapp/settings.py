@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Account',
     'Custumer',
     'Admin',
+    'product',
     'rest_framework.authtoken',
     'corsheaders',
 ]

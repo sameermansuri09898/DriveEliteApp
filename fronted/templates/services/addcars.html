@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Car</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.9)),
+                url('https://images.unsplash.com/photo-1503376780353-7e6692767b70') no-repeat center/cover;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    background: #111;
+    padding: 30px;
+    width: 420px;
+    border-radius: 12px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.7);
+    color: white;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: white;
+}
+
+input:focus, textarea:focus {
+    border-color: #00c6ff;
+    outline: none;
+}
+
+.error {
+    color: #ff4d4d;
+    font-size: 12px;
+}
+
+.success {
+    color: #00ffae;
+    text-align: center;
+    margin-top: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    margin-top: 15px;
+    border-radius: 8px;
+    background: linear-gradient(45deg,#00c6ff,#0072ff);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>🚗 Add Car</h2>
+
+<form id="carForm">
+
+<div class="form-group">
+<label>Name</label>
+<input type="text" id="name">
+<div class="error" id="nameError"></div>
+</div>
+
+<div class="form-group">
+<label>Brand</label>
+<input type="text" id="brand">
+<div class="error" id="brandError"></div>
+</div>
+
+<div class="form-group">
+<label>Model</label>
+<input type="text" id="model">
+<div class="error" id="modelError"></div>
+</div>
+
+<div class="form-group">
+<label>Price Per Day</label>
+<input type="number" id="price">
+<div class="error" id="priceError"></div>
+</div>
+
+<div class="form-group">
+<label>Offer (%)</label>
+<input type="number" id="offer">
+<div class="error" id="offerError"></div>
+</div>
+
+<div class="form-group">
+<label>Fine Per Day</label>
+<input type="number" id="fine">
+<div class="error" id="fineError"></div>
+</div>
+
+<div class="form-group">
+<label>Pickup Location</label>
+<input type="text" id="pickup">
+<div class="error" id="pickupError"></div>
+</div>
+
+<div class="form-group">
+<label>Dropoff Location</label>
+<input type="text" id="dropoff">
+<div class="error" id="dropoffError"></div>
+</div>
+
+<div class="form-group">
+<label>Description</label>
+<textarea id="desc"></textarea>
+<div class="error" id="descError"></div>
+</div>
+
+<div class="form-group">
+<label>Thumbnail</label>
+<input type="file" id="thumbnail">
+<div class="error" id="thumbnailError"></div>
+</div>
+
+<div class="form-group">
+<label>Car Images</label>
+<input type="file" id="images" multiple>
+<div class="error" id="imagesError"></div>
+</div>
+
+<button type="submit">Add Car</button>
+
+<div class="success" id="successMsg"></div>
+
+</form>
+</div>
+
+<script>
+document.getElementById("carForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    document.querySelectorAll(".error").forEach(el => el.innerHTML = "");
+    document.getElementById("successMsg").innerHTML = "";
+
+    let formData = new FormData();
+
+    formData.append("name", name.value);
+    formData.append("brand", brand.value);
+    formData.append("model", model.value);
+    formData.append("price_per_day", price.value);
+    formData.append("offer", offer.value);
+    formData.append("fine_per_day", fine.value);
+    formData.append("pickup_location", pickup.value);
+    formData.append("dropoff_location", dropoff.value);
+    formData.append("description", desc.value);
+
+    if (thumbnail.files[0]) {
+        formData.append("car_thumbnail", thumbnail.files[0]);
+    }
+
+    for (let i = 0; i < images.files.length; i++) {
+        formData.append("images", images.files[i]);
+    }
+
+    try {
+        let res = await fetch("http://127.0.0.1:8000/api/cars/", {
+            method: "POST",
+            body: formData
+        });
+
+        let data = await res.json();
+
+        if (!res.ok) {
+            handleErrors(data);
+            return;
+        }
+
+        successMsg.innerHTML = "✅ Car Added Successfully!";
+        carForm.reset();
+
+    } catch(err) {
+        alert("Server error!");
+    }
+});
+
+function handleErrors(errors) {
+
+    let fieldMap = {
+        name: "nameError",
+        brand: "brandError",
+        model: "modelError",
+        price_per_day: "priceError",
+        offer: "offerError",
+        fine_per_day: "fineError",
+        pickup_location: "pickupError",
+        dropoff_location: "dropoffError",
+        description: "descError",
+        car_thumbnail: "thumbnailError",
+        images: "imagesError"
+    };
+
+    for (let field in errors) {
+
+        let message = errors[field].join(", ");
+
+        if (field === "non_field_errors") {
+            alert(message);
+            continue;
+        }
+
+        let errorId = fieldMap[field];
+
+        if (errorId && document.getElementById(errorId)) {
+            document.getElementById(errorId).innerHTML = message;
+        }
+    }
+}
+</script>
+
+</body>
+</html>
