@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find Car</title>
+
+  <style>
+    *{box-sizing:border-box}
+    body { margin: 0; font-family: Inter, Arial, sans-serif; }
+
+    .hero {
+      min-height: 100vh;
+      background: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70') center/cover no-repeat;
+      display: flex; align-items: center; justify-content: center; position: relative;
+      padding: 20px;
+    }
+
+    .overlay { position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.65)); }
+
+    .wrapper { position:relative; width:100%; max-width: 460px; }
+
+    .title { color:#fff; font-size:28px; font-weight:700; margin-bottom:14px; text-align:center; }
+
+    .card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(6px);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    }
+
+    .field { margin-bottom: 12px; }
+    .label { font-size:12px; color:#555; margin-bottom:6px; display:block; }
+
+    .input, select {
+      width:100%;
+      padding:12px 12px;
+      border-radius:10px;
+      border:1px solid #ddd;
+      outline:none;
+      font-size:14px;
+      background:#f9fafb;
+    }
+
+    .row { display:flex; gap:10px; }
+    .row .field { flex:1; }
+
+    .toggle-group {
+      display:flex; border:1px solid #ddd; border-radius:10px; overflow:hidden; margin-bottom:12px;
+    }
+    .toggle-group button{
+      flex:1; padding:10px; border:none; background:#eee; cursor:pointer; font-size:14px;
+    }
+    .toggle-group .active{ background:#7c3aed; color:#fff; }
+
+    .btn {
+      width:100%; padding:14px; border:none; border-radius:12px;
+      background: linear-gradient(90deg,#7c3aed,#9333ea);
+      color:#fff; font-size:16px; font-weight:600; cursor:pointer; margin-top:6px;
+    }
+
+    .btn:hover{ opacity:.95 }
+
+    @media(max-width:500px){
+      .title{font-size:22px}
+      .row{flex-direction:column}
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="hero">
+  <div class="overlay"></div>
+
+  <div class="wrapper">
+    <div class="title">Book a Car</div>
+
+    <form class="card" onsubmit="handleSubmit(event)">
+
+      <!-- Location -->
+      <div class="field">
+        <label class="label">Pickup Location</label>
+        <input class="input" type="text" id="location" placeholder="Enter city, airport, or address (e.g. New York Airport)">
+      </div>
+
+      <!-- Drop Location -->
+      <div class="field">
+        <label class="label">Drop Location</label>
+        <input class="input" type="text" id="drop" placeholder="Same as pickup or choose different location">
+      </div>
+
+      <!-- Dates -->
+      <div class="row">
+        <div class="field">
+          <label class="label">Pickup Date</label>
+          <input class="input" type="date" id="pickupDate">
+        </div>
+        <div class="field">
+          <label class="label">Drop Date</label>
+          <input class="input" type="date" id="dropDate">
+        </div>
+      </div>
+
+      <!-- Time -->
+      <div class="row">
+        <div class="field">
+          <label class="label">Pickup Time</label>
+          <input class="input" type="time" id="pickupTime">
+        </div>
+        <div class="field">
+          <label class="label">Drop Time</label>
+          <input class="input" type="time" id="dropTime">
+        </div>
+      </div>
+
+      <!-- Drive Type -->
+      <div class="field">
+        <label class="label">Drive Option</label>
+        <div class="toggle-group" id="driveType">
+          <button class="active" onclick="selectToggle(this,'Self Drive')">Self Drive</button>
+          <button onclick="selectToggle(this,'With Driver')">With Driver</button>
+        </div>
+      </div>
+
+      <!-- Fuel + Car Type -->
+      <div class="row">
+        <div class="field">
+          <label class="label">Fuel Type</label>
+          <select id="fuel">
+            <option value="">Select fuel</option>
+            <option>Petrol</option>
+            <option>Diesel</option>
+            <option>Electric</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="label">Car Type</label>
+          <select id="carType">
+            <option value="">Select type</option>
+            <option>SUV</option>
+            <option>Sedan</option>
+            <option>Hatchback</option>
+            <option>Luxury</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Budget -->
+      <div class="field">
+        <label class="label">Budget Range ($)</label>
+        <input class="input" type="number" id="budget" placeholder="Enter max budget e.g. 100">
+      </div>
+
+      <!-- Passengers -->
+      <div class="field">
+        <label class="label">Passengers</label>
+        <input class="input" type="number" id="passengers" placeholder="Number of passengers (e.g. 4)">
+      </div>
+
+      <button type="submit" class="btn">Find Available Cars</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let selectedDrive = "Self Drive";
+
+  function selectToggle(btn, type) {
+    document.querySelectorAll('#driveType button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedDrive = type;
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const data = {
+      location: document.getElementById('location').value,
+      drop: document.getElementById('drop').value,
+      pickupDate: document.getElementById('pickupDate').value,
+      dropDate: document.getElementById('dropDate').value,
+      pickupTime: document.getElementById('pickupTime').value,
+      dropTime: document.getElementById('dropTime').value,
+      fuel: document.getElementById('fuel').value,
+      carType: document.getElementById('carType').value,
+      budget: document.getElementById('budget').value,
+      passengers: document.getElementById('passengers').value,
+      drive: selectedDrive
+    };
+
+    for (let key in data) {
+      if (!data[key]) {
+        alert('Please complete all fields');
+        return;
+      }
+    }
+
+    alert(`Searching cars...
+Location: ${data.location}
+Drive: ${data.drive}
+Type: ${data.carType}`);
+  }
+  
+</script>
+
+</body>
+</html>
