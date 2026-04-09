@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Details</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #b8b8b8;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .car-img {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .thumbnails {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .thumbnails img {
+      width: 60px;
+      height: 60px;
+      border-radius: 8px;
+      cursor: pointer;
+      object-fit: cover;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: bold;
+    }
+
+    .features {
+      margin-top: 10px;
+      color: #555;
+      font-size: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .price-box {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .rent-btn {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #16a34a;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .rent-btn:hover {
+      background: #15803d;
+    }
+
+    .tabs {
+      margin-top: 30px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 20px;
+    }
+
+    .tab {
+      padding-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .active {
+      border-bottom: 2px solid #16a34a;
+      color: #16a34a;
+      font-weight: bold;
+    }
+
+    .content {
+      margin-top: 15px;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="grid">
+    <div>
+      <img id="mainImage" class="car-img" src="../../images/car1.png" />
+      <div class="thumbnails">
+        <img src="../../images/car1.png" onclick="changeImage(this.src)">
+        <img src="../../images/car2.png" onclick="changeImage(this.src)">
+      </div>
+    </div>
+
+    <div>
+      <div class="title">Nissan Sentra</div>
+
+      <div class="features">
+        <span>🚗 5 Seats</span>
+        <span>⚡ Hybrid</span>
+        <span>❄️ AC</span>
+        <span>⚙️ Automatic</span>
+      </div>
+
+      <div class="price-box">
+        <div>
+          <div>Per Hour</div>
+          <strong>$20</strong>
+        </div>
+        <div>
+          <div>Per Day</div>
+          <strong>$350</strong>
+        </div>
+      </div>
+
+      <p style="margin-top:10px;">
+        Start From <s>$120</s> <strong>$90</strong>
+      </p>
+
+      <button class="rent-btn">Rent This Car</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('details', this)">Vehicle Details</div>
+    <div class="tab" onclick="showTab('reviews', this)">Reviews</div>
+  </div>
+
+  <div id="details" class="content">
+    <h3>Details Description</h3>
+    <p>Comfortable and efficient car for daily and long trips.</p>
+  </div>
+
+  <div id="reviews" class="content" style="display:none;">
+    <h3>Reviews</h3>
+    <p>No reviews yet.</p>
+  </div>
+</div>
+
+<script>
+  function changeImage(src) {
+    document.getElementById('mainImage').src = src;
+  }
+
+  function showTab(tabId, element) {
+    document.getElementById('details').style.display = 'none';
+    document.getElementById('reviews').style.display = 'none';
+    document.getElementById(tabId).style.display = 'block';
+
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    element.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
