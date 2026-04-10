@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Owner Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6f9;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 26px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .title {
+      color: #777;
+      font-size: 14px;
+    }
+
+    .value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .icon {
+      font-size: 30px;
+      padding: 10px;
+      border-radius: 50%;
+      background: #eee;
+    }
+
+    .green { color: green; }
+    .red { color: red; }
+
+    @media(max-width: 600px) {
+      h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🚗 Car Owner Dashboard</h1>
+
+  <div class="dashboard">
+    <div class="card">
+      <div>
+        <div class="title">Total Cars</div>
+        <div class="value" id="totalCars">0</div>
+      </div>
+      <div class="icon">🚗</div>
+    </div>
+
+    <div class="card">
+      <div>
+        <div class="title">Available Cars</div>
+        <div class="value green" id="availableCars">0</div>
+      </div>
+      <div class="icon">✅</div>
+    </div>
+
+    <div class="card">
+      <div>
+        <div class="title">Rented Cars</div>
+        <div class="value red" id="rentedCars">0</div>
+      </div>
+      <div class="icon">❌</div>
+    </div>
+  </div>
+
+  <script>
+    // Example Data (you can replace this with API later)
+    const data = {
+      total: 24,
+      available: 10,
+      rented: 14
+    };
+
+    // Update UI
+    document.getElementById("totalCars").innerText = data.total;
+    document.getElementById("availableCars").innerText = data.available;
+    document.getElementById("rentedCars").innerText = data.rented;
+  </script>
+
+</body>
+</html>

@@ -15,6 +15,7 @@ class Car(models.Model):
     dropoff_location = models.CharField(max_length=100)
     offer = models.FloatField(default=0)
     fine_per_day = models.IntegerField(default=0)
+    is_available = models.BooleanField(default=True)
     
 
     def __str__(self):
