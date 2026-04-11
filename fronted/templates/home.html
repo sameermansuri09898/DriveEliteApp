@@ -979,17 +979,7 @@
           <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
         </div>
         <div class="card-car-img">
-          <!-- <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="120" cy="92" rx="100" ry="8" fill="rgba(0,0,0,0.08)"/>
-            <path d="M18 62 Q30 42 62 34 L84 26 Q105 22 122 26 L162 36 Q188 48 192 64 L193 72 H18Z" fill="#c0392b"/>
-            <path d="M64 34 L74 16 Q92 10 114 14 L148 28 L165 38Z" fill="#a93226"/>
-            <path d="M67 32 L77 17 Q93 12 112 15 L144 27 L160 36Z" fill="rgba(255,255,255,0.14)"/>
-            <rect x="16" y="69" width="178" height="10" rx="4" fill="#922b21"/>
-            <circle cx="46" cy="78" r="16" fill="#1a1a2e"/><circle cx="46" cy="78" r="11" fill="#2a2a3e"/><circle cx="46" cy="78" r="6" fill="#1a1a2e"/>
-            <circle cx="166" cy="78" r="16" fill="#1a1a2e"/><circle cx="166" cy="78" r="11" fill="#2a2a3e"/><circle cx="166" cy="78" r="6" fill="#1a1a2e"/>
-            <rect x="16" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-            <rect x="181" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-          </svg> -->
+         
           <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
         </div>
       </div>
@@ -1055,17 +1045,7 @@
           <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
         </div>
         <div class="card-car-img">
-          <!-- <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="120" cy="92" rx="100" ry="8" fill="rgba(0,0,0,0.08)"/>
-            <path d="M18 62 Q30 42 62 34 L84 26 Q105 22 122 26 L162 36 Q188 48 192 64 L193 72 H18Z" fill="#c0392b"/>
-            <path d="M64 34 L74 16 Q92 10 114 14 L148 28 L165 38Z" fill="#a93226"/>
-            <path d="M67 32 L77 17 Q93 12 112 15 L144 27 L160 36Z" fill="rgba(255,255,255,0.14)"/>
-            <rect x="16" y="69" width="178" height="10" rx="4" fill="#922b21"/>
-            <circle cx="46" cy="78" r="16" fill="#1a1a2e"/><circle cx="46" cy="78" r="11" fill="#2a2a3e"/><circle cx="46" cy="78" r="6" fill="#1a1a2e"/>
-            <circle cx="166" cy="78" r="16" fill="#1a1a2e"/><circle cx="166" cy="78" r="11" fill="#2a2a3e"/><circle cx="166" cy="78" r="6" fill="#1a1a2e"/>
-            <rect x="16" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-            <rect x="181" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-          </svg> -->
+
           <img src="../images/car2.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
         </div>
       </div>
@@ -1319,6 +1299,62 @@ else {
     el.style.transition = `opacity 0.5s ease ${i * 0.08}s, transform 0.5s ease ${i * 0.08}s`;
     observer.observe(el);
   });
+
+  const container=document.getElementById("carsContainer");
+
+  fetch("http://127.0.0.1:8000/api/carslist/")
+  .then(res=>res.json())
+  .then(cars=>{
+    cars.forEach(car=>{
+      container.classList.add("car-card");
+      container.innerHTML+=`
+      <div class="card-img-wrap">
+        <div class="card-top-row">
+          <div class="brand-pill">${car.brand}</div>
+          <div class="availability ${car.is_available ? 'available' : 'booked'}">
+            ${car.is_available ? "Available" : "Booked"}
+          </div>
+        </div>
+        <div class="card-car-img">
+          <img src="http://127.0.0.1:8000${car.car_thumbnail}" alt="">
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${car.name}</div>
+        <div class="card-sub">
+          ${car.brand} • ${car.model}
+        </div>
+        <div class="card-features">
+          <div class="feat-pill">📍 ${car.pickup_location}</div>
+          <div class="feat-pill">🔁 ${car.dropoff_location}</div>
+          <div class="feat-pill">💰 ₹${car.price_per_day}/day</div>
+        </div>
+        <div class="card-footer">
+          <div class="owner-row">
+            <div class="owner-ava">${car.owner?.username.substring(0,2).toUpperCase()}</div>
+            <div>${car.owner?.username}</div>
+          </div>
+          <div>
+            ${car.discount > 0 ? `<div class="disc-pill">${car.offer}% OFF</div>` : ''}
+            <div class="price-val">
+              ₹${Number(car.final_price || car.price_per_day).toFixed(2)}
+            </div>
+            ${car.is_available ? `<button class="book-btn" onclick="bookCar(${car.id})">Book Now</button>` : `<button class="book-btn" disabled>Booked</button>`}
+          </div>
+        </div>
+      </div>
+      `;
+    });
+  })
+  .catch(err=>console.log("API ERROR:", err));
+
+  function bookCar(id){
+    alert("Booking Car ID: " + id);
+  }
+
+
+
+  
 </script>
 </body>
 </html>

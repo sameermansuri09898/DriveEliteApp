@@ -3,6 +3,7 @@ from product.models import Car,CarImage
 from product.productserializer import CarSerializer,CarImageSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import generics
 
 class CarList(viewsets.ModelViewSet):
     queryset = Car.objects.all()
@@ -20,3 +21,15 @@ class CarList(viewsets.ModelViewSet):
             CarImage.objects.create(car=car, image=img)
 
         return Response(self.get_serializer(car).data, status=status.HTTP_201_CREATED)
+
+class carlist(generics.ListAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+class RetrieveCar(generics.RetrieveAPIView):
+    queryset = Car.objects.all()
+    serializer_class = CarSerializer
+
+    def get_object(self):
+        return Car.objects.get(id=self.kwargs['pk'])
+    

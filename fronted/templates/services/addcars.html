@@ -148,6 +148,12 @@ button:hover {
 <div class="error" id="modelError"></div>
 </div>
 
+<div class="form-group" style="display: none;">
+<label>Car Owner</label>
+<input type="text" id="owner" value="">
+<div class="error" id="ownerError"></div>
+</div>
+
 <div class="form-group">
 <label>Price</label>
 <input type="number" id="price">
@@ -233,6 +239,7 @@ form.addEventListener("submit", async function(e){
     formData.append("pickup_location", pickup.value);
     formData.append("dropoff_location", dropoff.value);
     formData.append("description", desc.value);
+    formData.append("owner", owner.value);
 
     if (thumbnail.files[0]) {
         formData.append("car_thumbnail", thumbnail.files[0]);
@@ -285,7 +292,8 @@ function handleErrors(errors) {
         dropoff_location: "dropoff",
         description: "desc",
         car_thumbnail: "thumbnail",
-        images: "images"
+        images: "images",
+        owner: "owner"
     };
 
     for (let field in errors) {

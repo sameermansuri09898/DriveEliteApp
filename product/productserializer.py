@@ -9,10 +9,12 @@ class CarImageSerializer(serializers.ModelSerializer):
 class CarSerializer(serializers.ModelSerializer):
     images = CarImageSerializer(many=True, read_only=True)
     final_price = serializers.SerializerMethodField()
+    discount = serializers.SerializerMethodField()
     is_available = serializers.SerializerMethodField()
+    
     class Meta:
         model = Car
-        fields = ['id','name','brand','model','price_per_day','car_thumbnail','description','pickup_location','dropoff_location','offer','fine_per_day','final_price','images','is_available']
+        fields = ['id','name','brand','model','price_per_day','car_thumbnail','description','pickup_location','dropoff_location','offer','fine_per_day','final_price','discount','images','is_available','owner']
 
     def get_final_price(self, obj):
         return obj.perday_offer_price()
@@ -26,13 +28,11 @@ class CarSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Fine per day must be greater than 0")
         return value    
+ 
 
-    def validate_is_available(self, value):
-        if value not in [True, False]:
-            raise serializers.ValidationError("is_available must be True or False")
-        return value    
-
-    def get_availability_status(self, obj):
+    def get_is_available(self, obj):
         return "Available" if obj.is_available else "Booked"
 
+    def get_discount(self, obj):
+        return obj.discount()    
  

@@ -16,6 +16,8 @@ class Car(models.Model):
     offer = models.FloatField(default=0)
     fine_per_day = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,default=1,null=True,blank=True)
+    
     
 
     def __str__(self):
@@ -23,6 +25,12 @@ class Car(models.Model):
 
     def perday_offer_price(self):
       return self.price_per_day - (self.price_per_day * self.offer / 100)
+
+    def is_available(self):
+      return self.is_available
+
+    def discount(self):
+      return self.price_per_day - self.perday_offer_price()
 
     
 
