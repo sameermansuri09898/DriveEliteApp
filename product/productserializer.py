@@ -14,7 +14,7 @@ class CarSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Car
-        fields = ['id','name','brand','model','price_per_day','car_thumbnail','description','pickup_location','dropoff_location','offer','fine_per_day','final_price','discount','images','is_available','owner']
+        fields = ['id','car_name','brand','model','price_per_day','car_thumbnail','description','pickup_location','dropoff_location','offer','fine_per_day','final_price','discount','images','is_available','owner_name','controle','seated_capacity']
 
     def get_final_price(self, obj):
         return obj.perday_offer_price()
@@ -28,7 +28,12 @@ class CarSerializer(serializers.ModelSerializer):
         if value < 0:
             raise serializers.ValidationError("Fine per day must be greater than 0")
         return value    
- 
+    
+
+    def validate_seated_capacity(self, value):
+        if value < 0:
+            raise serializers.ValidationError("Seated capacity must be greater than 0")
+        return value    
 
     def get_is_available(self, obj):
         return "Available" if obj.is_available else "Booked"

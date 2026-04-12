@@ -1,411 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Car Details</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #b8b8b8;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Details</title>
 
-    .container {
-      max-width: 1100px;
-      margin: 20px auto;
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-    }
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f4f6f9;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
 
-    .car-img {
-      width: 100%;
-      height: 250px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
 
-    .thumbnails {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
+.car-img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 12px;
+}
 
-    .thumbnails img {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      cursor: pointer;
-      object-fit: cover;
-    }
+.thumbnails {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
 
-    .title {
-      font-size: 26px;
-      font-weight: bold;
-    }
+.thumbnails img {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  cursor: pointer;
+  object-fit: cover;
+  border: 2px solid transparent;
+}
 
-    .features {
-      margin-top: 10px;
-      color: #555;
-      font-size: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
+.thumbnails img:hover {
+  border-color: #007bff;
+}
 
-    .price-box {
-      background: #f9fafb;
-      padding: 15px;
-      border-radius: 12px;
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
+.title {
+  font-size: 28px;
+  font-weight: bold;
+}
 
-    .rent-btn {
-      margin-top: 20px;
-      width: 100%;
-      padding: 12px;
-      background: #16a34a;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.sub {
+  color: #666;
+  margin-top: 5px;
+}
 
-    .rent-btn:hover {
-      background: #15803d;
-    }
+.features {
+  margin-top: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
-    .tabs {
-      margin-top: 30px;
-      border-bottom: 1px solid #ddd;
-      display: flex;
-      gap: 20px;
-    }
+.tag {
+  background: #eef2f7;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+}
 
-    .tab {
-      padding-bottom: 10px;
-      cursor: pointer;
-    }
+.price-box {
+  margin-top: 20px;
+  background: #f9fafb;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+}
 
-    .active {
-      border-bottom: 2px solid #16a34a;
-      color: #16a34a;
-      font-weight: bold;
-    }
+.price {
+  font-size: 22px;
+  font-weight: bold;
+}
 
-    .content {
-      margin-top: 15px;
-      color: #555;
-    }
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+}
 
-    @media (max-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+.discount {
+  color: green;
+  font-weight: 600;
+}
+
+.owner {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: #007bff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.btn {
+  margin-top: 20px;
+  width: 100%;
+  padding: 14px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #15803d;
+}
+
+.tabs {
+  margin-top: 30px;
+  display: flex;
+  gap: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.active {
+  border-bottom: 2px solid #16a34a;
+  color: #16a34a;
+  font-weight: bold;
+}
+
+.content {
+  margin-top: 15px;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
 </head>
+
 <body>
 
 <div class="container">
   <div class="grid">
+
+    <!-- LEFT -->
     <div>
-      <img id="mainImage" class="car-img" src="../../images/car1.png" />
-      <div class="thumbnails">
-        <img src="../../images/car1.png" onclick="changeImage(this.src)">
-        <img src="../../images/car2.png" onclick="changeImage(this.src)">
-      </div>
+      <img id="mainImage" class="car-img" />
+      <div class="thumbnails" id="thumbnails"></div>
     </div>
 
+    <!-- RIGHT -->
     <div>
-      <div class="title">Nissan Sentra</div>
+      <div class="title" id="title"></div>
+      <div class="sub" id="model"></div>
 
-      <div class="features">
-        <span>🚗 5 Seats</span>
-        <span>⚡ Hybrid</span>
-        <span>❄️ AC</span>
-        <span>⚙️ Automatic</span>
-      </div>
+      <div class="features" id="features"></div>
 
       <div class="price-box">
         <div>
-          <div>Per Hour</div>
-          <strong>$20</strong>
+          <div>Original</div>
+          <div class="old-price" id="oldPrice"></div>
         </div>
         <div>
-          <div>Per Day</div>
-          <strong>$350</strong>
+          <div>Now</div>
+          <div class="price" id="newPrice"></div>
+          <div class="discount" id="discount"></div>
         </div>
       </div>
 
-      <p style="margin-top:10px;">
-        Start From <s>$120</s> <strong>$90</strong>
-      </p>
+      <div class="owner">
+        <div class="avatar" id="avatar"></div>
+        <div id="owner"></div>
+      </div>
 
-      <button class="rent-btn">Rent This Car</button>
+      <button class="btn" id="bookBtn">Book Now</button>
     </div>
   </div>
 
+  <!-- TABS -->
   <div class="tabs">
-    <div class="tab active" onclick="showTab('details', this)">Vehicle Details</div>
-    <div class="tab" onclick="showTab('reviews', this)">Reviews</div>
+    <div class="tab active" onclick="showTab('details', this)">Details</div>
+    <div class="tab" onclick="showTab('extra', this)">Extra Info</div>
   </div>
 
-  <div id="details" class="content">
-    <h3>Details Description</h3>
-    <p>Comfortable and efficient car for daily and long trips.</p>
-  </div>
+  <div id="details" class="content"></div>
+  <div id="extra" class="content" style="display:none;"></div>
 
-  <div id="reviews" class="content" style="display:none;">
-    <h3>Reviews</h3>
-    <p>No reviews yet.</p>
-  </div>
 </div>
 
 <script>
-  function changeImage(src) {
-    document.getElementById('mainImage').src = src;
+const id = new URLSearchParams(window.location.search).get("id");
+
+fetch(`http://127.0.0.1:8000/api/cars/${id}/`)
+.then(res => res.json())
+.then(car => {
+
+  const newPrice = car.price_per_day - (car.price_per_day * car.offer / 100);
+
+  document.getElementById("mainImage").src = car.car_thumbnail;
+
+  document.getElementById("title").innerText = `${car.car_name} - ${car.brand}`;
+  document.getElementById("model").innerText = car.model;
+
+  document.getElementById("oldPrice").innerText = `₹${car.price_per_day}`;
+  document.getElementById("newPrice").innerText = `₹${newPrice.toFixed(0)}`;
+  document.getElementById("discount").innerText = `${car.offer}% OFF`;
+
+  document.getElementById("owner").innerText = car.owner_name || "Owner";
+  document.getElementById("avatar").innerText =
+    car.owner_name ? car.owner_name[0].toUpperCase() : "U";
+
+  document.getElementById("features").innerHTML = `
+    <div class="tag">🚗 ${car.seated_capacity} Seats</div>
+    <div class="tag">⚙️ ${car.controle}</div>
+    <div class="tag">📍 ${car.pickup_location}</div>
+    <div class="tag">📍 ${car.dropoff_location}</div>
+    <div class="tag">💰 Fine: ₹${car.fine_per_day}/day</div>
+  `;
+
+  document.getElementById("details").innerText = car.description;
+
+  document.getElementById("extra").innerHTML = `
+    <p><strong>Available:</strong> ${car.is_available ? "Yes" : "No"}</p>
+    <p><strong>Created:</strong> ${car.created_at}</p>
+  `;
+
+  // MULTIPLE IMAGES
+  const thumbnails = document.getElementById("thumbnails");
+
+  if (car.images && car.images.length > 0) {
+    car.images.forEach(img => {
+      const el = document.createElement("img");
+      el.src = img.image;
+      el.onclick = () => changeImage(img.image);
+      thumbnails.appendChild(el);
+    });
+  } else {
+    thumbnails.innerHTML = `<img src="${car.car_thumbnail}" onclick="changeImage('${car.car_thumbnail}')">`;
   }
 
-  function showTab(tabId, element) {
-    document.getElementById('details').style.display = 'none';
-    document.getElementById('reviews').style.display = 'none';
-    document.getElementById(tabId).style.display = 'block';
-
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    element.classList.add('active');
+  // BUTTON STATE
+  const btn = document.getElementById("bookBtn");
+  if (!car.is_available) {
+    btn.innerText = "Not Available";
+    btn.disabled = true;
+    btn.style.background = "#ccc";
   }
+
+});
+
+function changeImage(src) {
+  document.getElementById("mainImage").src = src;
+}
+
+function showTab(tabId, element) {
+  document.getElementById('details').style.display = 'none';
+  document.getElementById('extra').style.display = 'none';
+  document.getElementById(tabId).style.display = 'block';
+
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  element.classList.add('active');
+}
 </script>
 
 </body>
 </html>
-    <!-- Card 1 -->
-    <div class="car-card" data-type="classic">
-      <div class="card-img-wrap">
-        <div class="card-top-row">
-          <div class="brand-pill">
-            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-            Mercury Comet
-          </div>
-          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-        </div>
-        <div class="card-car-img">
-          
-          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">Mercury Comet</div>
-        <div class="card-sub">Classic · 1965 · Petrol</div>
-        <div class="card-features">
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
-        </div>
-        <div class="card-footer">
-          <div class="owner-row">
-            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
-            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
-          </div>
-          <div class="price-col">
-            <div class="disc-pill">25% Off</div>
-            <div class="price-val">$6,250<span class="price-period">/week</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="car-card" data-type="classic">
-      <div class="card-img-wrap">
-        <div class="card-top-row">
-          <div class="brand-pill">
-            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-            Mercury Comet
-          </div>
-          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-        </div>
-        <div class="card-car-img">
-     
-          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">Mercury Comet</div>
-        <div class="card-sub">Classic · 1965 · Petrol</div>
-        <div class="card-features">
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
-        </div>
-        <div class="card-footer">
-          <div class="owner-row">
-            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
-            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
-          </div>
-          <div class="price-col">
-            <div class="disc-pill">25% Off</div>
-            <div class="price-val">$6,250<span class="price-period">/week</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="car-card" data-type="classic">
-      <div class="card-img-wrap">
-        <div class="card-top-row">
-          <div class="brand-pill">
-            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-            Mercury Comet
-          </div>
-          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-        </div>
-        <div class="card-car-img">
-         
-          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">Mercury Comet</div>
-        <div class="card-sub">Classic · 1965 · Petrol</div>
-        <div class="card-features">
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
-        </div>
-        <div class="card-footer">
-          <div class="owner-row">
-            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
-            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
-          </div>
-          <div class="price-col">
-            <div class="disc-pill">25% Off</div>
-            <div class="price-val">$6,250<span class="price-period">/week</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="car-card" data-type="classic">
-      <div class="card-img-wrap">
-        <div class="card-top-row">
-          <div class="brand-pill">
-            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-            Mercury Comet
-          </div>
-          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-        </div>
-        <div class="card-car-img">
-          <!-- <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="120" cy="92" rx="100" ry="8" fill="rgba(0,0,0,0.08)"/>
-            <path d="M18 62 Q30 42 62 34 L84 26 Q105 22 122 26 L162 36 Q188 48 192 64 L193 72 H18Z" fill="#c0392b"/>
-            <path d="M64 34 L74 16 Q92 10 114 14 L148 28 L165 38Z" fill="#a93226"/>
-            <path d="M67 32 L77 17 Q93 12 112 15 L144 27 L160 36Z" fill="rgba(255,255,255,0.14)"/>
-            <rect x="16" y="69" width="178" height="10" rx="4" fill="#922b21"/>
-            <circle cx="46" cy="78" r="16" fill="#1a1a2e"/><circle cx="46" cy="78" r="11" fill="#2a2a3e"/><circle cx="46" cy="78" r="6" fill="#1a1a2e"/>
-            <circle cx="166" cy="78" r="16" fill="#1a1a2e"/><circle cx="166" cy="78" r="11" fill="#2a2a3e"/><circle cx="166" cy="78" r="6" fill="#1a1a2e"/>
-            <rect x="16" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-            <rect x="181" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-          </svg> -->
-          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">Mercury Comet</div>
-        <div class="card-sub">Classic · 1965 · Petrol</div>
-        <div class="card-features">
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
-        </div>
-        <div class="card-footer">
-          <div class="owner-row">
-            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
-            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
-          </div>
-          <div class="price-col">
-            <div class="disc-pill">25% Off</div>
-            <div class="price-val">$6,250<span class="price-period">/week</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="car-card" data-type="classic">
-      <div class="card-img-wrap">
-        <div class="card-top-row">
-          <div class="brand-pill">
-            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-            Mercury Comet
-          </div>
-          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-        </div>
-        <div class="card-car-img">
-         
-          <img src="../images/car1.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">Mercury Comet</div>
-        <div class="card-sub">Classic · 1965 · Petrol</div>
-        <div class="card-features">
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
-        </div>
-        <div class="card-footer">
-          <div class="owner-row">
-            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
-            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
-          </div>
-          <div class="price-col">
-            <div class="disc-pill">25% Off</div>
-            <div class="price-val">$6,250<span class="price-period">/week</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="car-card" data-type="classic">
-      <div class="card-img-wrap">
-        <div class="card-top-row">
-          <div class="brand-pill">
-            <div class="brand-icon"><svg viewBox="0 0 24 24" fill="#e8b84b"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div>
-            Mercury Comet
-          </div>
-          <button class="wishlist-btn"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></button>
-        </div>
-        <div class="card-car-img">
-          <!-- <svg viewBox="0 0 240 100" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="120" cy="92" rx="100" ry="8" fill="rgba(0,0,0,0.08)"/>
-            <path d="M18 62 Q30 42 62 34 L84 26 Q105 22 122 26 L162 36 Q188 48 192 64 L193 72 H18Z" fill="#c0392b"/>
-            <path d="M64 34 L74 16 Q92 10 114 14 L148 28 L165 38Z" fill="#a93226"/>
-            <path d="M67 32 L77 17 Q93 12 112 15 L144 27 L160 36Z" fill="rgba(255,255,255,0.14)"/>
-            <rect x="16" y="69" width="178" height="10" rx="4" fill="#922b21"/>
-            <circle cx="46" cy="78" r="16" fill="#1a1a2e"/><circle cx="46" cy="78" r="11" fill="#2a2a3e"/><circle cx="46" cy="78" r="6" fill="#1a1a2e"/>
-            <circle cx="166" cy="78" r="16" fill="#1a1a2e"/><circle cx="166" cy="78" r="11" fill="#2a2a3e"/><circle cx="166" cy="78" r="6" fill="#1a1a2e"/>
-            <rect x="16" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-            <rect x="181" y="61" width="12" height="8" rx="2" fill="#f5e642" opacity="0.9"/>
-          </svg> -->
-          <img src="../images/car2.png" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 10px;" >
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="card-name">Mercury Comet</div>
-        <div class="card-sub">Classic · 1965 · Petrol</div>
-        <div class="card-features">
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>Nationwide</div>
-          <div class="feat-pill"><svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>7 Days</div>
-        </div>
-        <div class="card-footer">
-          <div class="owner-row">
-            <div class="owner-ava" style="background:#3b5bdb">AJ</div>
-            <div><div class="owner-name">Alex Jack</div><div class="owner-tag">Premium User</div></div>
-          </div>
-          <div class="price-col">
-            <div class="disc-pill">25% Off</div>
-            <div class="price-val">$6,250<span class="price-period">/week</span></div>
-          </div>
-        </div>
-      </div>
-    </div>

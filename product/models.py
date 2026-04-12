@@ -1,9 +1,10 @@
 from django.db import models
 from django.conf import settings
+from Account.models import CustomUser
 # Create your models here.
 
 class Car(models.Model):
-    name = models.CharField(max_length=100)
+    car_name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
     price_per_day = models.IntegerField()
@@ -16,9 +17,10 @@ class Car(models.Model):
     offer = models.FloatField(default=0)
     fine_per_day = models.IntegerField(default=0)
     is_available = models.BooleanField(default=True)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,default=1,null=True,blank=True)
-    
-    
+    seated_capacity = models.IntegerField(default=0)
+    controle = models.CharField(max_length=100)  
+    owner_name = models.CharField(max_length=100,null=True,blank=True)
+
 
     def __str__(self):
         return f"{self.name} - {self.brand} - {self.model}"

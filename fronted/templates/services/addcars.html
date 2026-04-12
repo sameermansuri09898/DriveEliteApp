@@ -1,8 +1,12 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Add Car</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 * {
@@ -13,27 +17,37 @@
 }
 
 body {
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)),
-    url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8') center/cover;
+    url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8') center/cover no-repeat;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
+/* CONTAINER */
 .container {
-    width: 500px;
-    padding: 30px;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(12px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+    width: 100%;
+    max-width: 520px;
+    padding: 25px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.8);
     color: white;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
 }
 
 h2 {
     text-align: center;
     margin-bottom: 20px;
+    font-weight: 600;
 }
 
 /* GRID */
@@ -43,39 +57,54 @@ h2 {
     gap: 15px;
 }
 
-@media(max-width:600px){
+@media (max-width: 600px) {
     .form-row {
         grid-template-columns: 1fr;
     }
 }
 
+/* INPUTS */
 .form-group {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 
 label {
     font-size: 13px;
+    opacity: 0.8;
 }
 
 input, textarea {
     width: 100%;
-    padding: 10px;
+    padding: 11px;
     margin-top: 5px;
-    border-radius: 8px;
-    border: 1px solid #333;
-    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    border: 1px solid #444;
+    background: rgba(255,255,255,0.06);
     color: white;
+    transition: 0.25s;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #aaa;
 }
 
 input:focus, textarea:focus {
     border-color: #00c6ff;
+    background: rgba(255,255,255,0.08);
     outline: none;
+    box-shadow: 0 0 8px rgba(0,198,255,0.4);
+}
+
+input[type="file"] {
+    padding: 8px;
+    cursor: pointer;
 }
 
 /* ERROR */
 .error {
     color: #ff4d4d;
     font-size: 12px;
+    margin-top: 3px;
 }
 
 input.error-border, textarea.error-border {
@@ -85,24 +114,26 @@ input.error-border, textarea.error-border {
 /* BUTTON */
 button {
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     margin-top: 15px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     background: linear-gradient(45deg,#00c6ff,#0072ff);
     color: white;
     font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
     transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(0,198,255,0.4);
 }
 
 button:disabled {
     opacity: 0.6;
     cursor: not-allowed;
-}
-
-button:hover {
-    transform: scale(1.02);
 }
 
 /* STATUS */
@@ -116,6 +147,13 @@ button:hover {
     text-align: center;
     color: #00ffae;
     margin-top: 10px;
+    font-weight: 500;
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 18px;
+    }
 }
 </style>
 </head>
@@ -128,83 +166,97 @@ button:hover {
 <form id="carForm">
 
 <div class="form-row">
-<div class="form-group">
-<label>Name</label>
-<input type="text" id="name">
-<div class="error" id="nameError"></div>
-</div>
+    <div class="form-group">
+        <label>Car Name</label>
+        <input type="text" id="car_name">
+        <div class="error" id="car_nameError"></div>
+    </div>
 
-<div class="form-group">
-<label>Brand</label>
-<input type="text" id="brand">
-<div class="error" id="brandError"></div>
-</div>
-</div>
-
-<div class="form-row">
-<div class="form-group">
-<label>Model</label>
-<input type="text" id="model">
-<div class="error" id="modelError"></div>
-</div>
-
-<div class="form-group" style="display: none;">
-<label>Car Owner</label>
-<input type="text" id="owner" value="">
-<div class="error" id="ownerError"></div>
-</div>
-
-<div class="form-group">
-<label>Price</label>
-<input type="number" id="price">
-<div class="error" id="priceError"></div>
-</div>
+    <div class="form-group">
+        <label>Brand</label>
+        <input type="text" id="brand">
+        <div class="error" id="brandError"></div>
+    </div>
 </div>
 
 <div class="form-row">
-<div class="form-group">
-<label>Offer (%)</label>
-<input type="number" id="offer">
-<div class="error" id="offerError"></div>
-</div>
+    <div class="form-group">
+        <label>Model</label>
+        <input type="text" id="model">
+        <div class="error" id="modelError"></div>
+    </div>
 
-<div class="form-group">
-<label>Fine</label>
-<input type="number" id="fine">
-<div class="error" id="fineError"></div>
-</div>
+    <div class="form-group">
+        <label>Control</label>
+        <input type="text" id="controle">
+        <div class="error" id="controleError"></div>
+    </div>
 </div>
 
 <div class="form-row">
-<div class="form-group">
-<label>Pickup</label>
-<input type="text" id="pickup">
-<div class="error" id="pickupError"></div>
+    <div class="form-group">
+        <label>Seated Capacity</label>
+        <input type="number" id="seated_capacity">
+        <div class="error" id="seated_capacityError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Price Per Day</label>
+        <input type="number" id="price">
+        <div class="error" id="priceError"></div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Offer (%)</label>
+        <input type="number" id="offer">
+        <div class="error" id="offerError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Fine/Day</label>
+        <input type="number" id="fine">
+        <div class="error" id="fineError"></div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Pickup</label>
+        <input type="text" id="pickup">
+        <div class="error" id="pickupError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Dropoff</label>
+        <input type="text" id="dropoff">
+        <div class="error" id="dropoffError"></div>
+    </div>
 </div>
 
 <div class="form-group">
-<label>Dropoff</label>
-<input type="text" id="dropoff">
-<div class="error" id="dropoffError"></div>
-</div>
-</div>
-
-<div class="form-group">
-<label>Description</label>
-<textarea id="desc"></textarea>
-<div class="error" id="descError"></div>
+    <label>Description</label>
+    <textarea id="desc"></textarea>
+    <div class="error" id="descError"></div>
 </div>
 
 <div class="form-group">
-<label>Thumbnail</label>
-<input type="file" id="thumbnail">
-<div class="error" id="thumbnailError"></div>
+    <label>Owner Name</label>
+    <input type="text" id="owner_name">
+    <div class="error" id="owner_nameError"></div>
 </div>
 
 <div class="form-group">
-<label>Images</label>
-<input type="file" id="images" multiple>
-<div class="error" id="imagesError"></div>
+    <label>Thumbnail</label>
+    <input type="file" id="thumbnail">
+    <div class="error" id="thumbnailError"></div>
+</div>
+
+<div class="form-group">
+    <label>Images</label>
+    <input type="file" id="images" multiple>
+    <div class="error" id="imagesError"></div>
 </div>
 
 <button type="submit" id="submitBtn">Add Car</button>
@@ -230,16 +282,18 @@ form.addEventListener("submit", async function(e){
 
     let formData = new FormData();
 
-    formData.append("name", name.value);
+    formData.append("car_name", car_name.value);
     formData.append("brand", brand.value);
     formData.append("model", model.value);
+    formData.append("controle", controle.value);
+    formData.append("seated_capacity", seated_capacity.value);
     formData.append("price_per_day", price.value);
     formData.append("offer", offer.value);
     formData.append("fine_per_day", fine.value);
     formData.append("pickup_location", pickup.value);
     formData.append("dropoff_location", dropoff.value);
     formData.append("description", desc.value);
-    formData.append("owner", owner.value);
+    formData.append("owner_name", owner_name.value);
 
     if (thumbnail.files[0]) {
         formData.append("car_thumbnail", thumbnail.files[0]);
@@ -280,11 +334,12 @@ function clearErrors() {
 }
 
 function handleErrors(errors) {
-
     const fieldMap = {
-        name: "name",
+        car_name: "car_name",
         brand: "brand",
         model: "model",
+        controle: "controle",
+        seated_capacity: "seated_capacity",
         price_per_day: "price",
         offer: "offer",
         fine_per_day: "fine",
@@ -293,11 +348,10 @@ function handleErrors(errors) {
         description: "desc",
         car_thumbnail: "thumbnail",
         images: "images",
-        owner: "owner"
+        owner_name: "owner_name"
     };
 
     for (let field in errors) {
-
         let message = errors[field].join(", ");
 
         if (field === "non_field_errors") {
@@ -322,3 +376,4 @@ function handleErrors(errors) {
 
 </body>
 </html>
+
