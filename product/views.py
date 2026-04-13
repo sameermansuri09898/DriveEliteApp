@@ -65,6 +65,13 @@ class carlist(generics.ListAPIView):
     serializer_class = CarSerializer
 
 
+class Carlistproto(generics.ListAPIView):
+    serializer_class = CarSerializer
+
+    def get_queryset(self):
+        return Car.objects.order_by('-id')[:8]
+
+
 class RetrieveCarView(generics.RetrieveAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer

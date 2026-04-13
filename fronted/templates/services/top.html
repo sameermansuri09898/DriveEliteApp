@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="container">
+    
+  </div>
+</body>
+<script>
+  fetch('http://localhost:8000/api/carslistproto/')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    const container = document.querySelector('.container');
+    data.forEach(car => {
+      const carCard = document.createElement('div');
+      carCard.classList.add('car-card');
+      carCard.innerHTML = `
+        <img src="http://localhost:8000${car.thumbnail}" alt="${car.car_name}">
+        <h3>${car.car_name}</h3>
+        <p>${car.brand}</p>
+        <p>${car.model}</p>
+        <p>${car.price}</p>
+      `;
+      container.appendChild(carCard);
+    });
+    
+  })
+  .catch(error => console.error(error));
+</script>
+</html>

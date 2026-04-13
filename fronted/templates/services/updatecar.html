@@ -1,0 +1,458 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Car</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.9)),
+    url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* CONTAINER */
+.container {
+    width: 100%;
+    max-width: 520px;
+    padding: 25px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(14px);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+    color: white;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {opacity:0; transform: translateY(20px);}
+    to {opacity:1; transform: translateY(0);}
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* GRID */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* INPUTS */
+.form-group {
+    margin-bottom: 14px;
+}
+
+label {
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 11px;
+    margin-top: 5px;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background: rgba(255,255,255,0.06);
+    color: white;
+    transition: 0.25s;
+}
+
+input::placeholder, textarea::placeholder {
+    color: #aaa;
+}
+
+input:focus, textarea:focus {
+    border-color: #00c6ff;
+    background: rgba(255,255,255,0.08);
+    outline: none;
+    box-shadow: 0 0 8px rgba(0,198,255,0.4);
+}
+
+input[type="file"] {
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* ERROR */
+.error {
+    color: #ff4d4d;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+input.error-border, textarea.error-border {
+    border-color: #ff4d4d;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(45deg,#00c6ff,#0072ff);
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(0,198,255,0.4);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* STATUS */
+.loading {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.success {
+    text-align: center;
+    color: #00ffae;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+@media (max-width: 400px) {
+    .container {
+        padding: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>🚗 Add Car</h2>
+
+<form id="carForm">
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Car Name</label>
+        <input type="text" id="car_name">
+        <div class="error" id="car_nameError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Brand</label>
+        <input type="text" id="brand">
+        <div class="error" id="brandError"></div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Model</label>
+        <input type="text" id="model">
+        <div class="error" id="modelError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Control</label>
+        <input type="text" id="controle">
+        <div class="error" id="controleError"></div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Seated Capacity</label>
+        <input type="number" id="seated_capacity">
+        <div class="error" id="seated_capacityError"></div>
+    </div>
+
+    <div class="form-group">
+
+
+        <label>Price Per Day</label>
+        <input type="number" id="price">
+        <div class="error" id="priceError"></div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Offer (%)</label>
+        <input type="number" id="offer">
+        <div class="error" id="offerError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Fine/Day</label>
+        <input type="number" id="fine">
+        <div class="error" id="fineError"></div>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label>Pickup</label>
+        <input type="text" id="pickup">
+        <div class="error" id="pickupError"></div>
+    </div>
+
+    <div class="form-group">
+        <label>Dropoff</label>
+        <input type="text" id="dropoff">
+        <div class="error" id="dropoffError"></div>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Description</label>
+    <textarea id="desc"></textarea>
+    <div class="error" id="descError"></div>
+</div>
+
+<div class="form-group">
+    <label>Owner Name</label>
+    <input type="text" id="owner_name">
+    <div class="error" id="owner_nameError"></div>
+</div>
+
+<div class="form-group">
+    <label>Thumbnail</label>
+    <input type="file" id="thumbnail">
+    <div class="error" id="thumbnailError"></div>
+</div>
+
+<div class="form-group">
+    <label>Images</label>
+    <input type="file" id="images" multiple>
+    <div class="error" id="imagesError"></div>
+</div>
+
+<button type="submit" id="submitBtn">update Car</button>
+
+<div class="loading" id="loading"></div>
+<div class="success" id="successMsg"></div>
+
+</form>
+</div>
+
+<script>
+
+// ================== DOM SELECT ==================
+const form = document.getElementById("carForm");
+const btn = document.getElementById("submitBtn");
+
+const car_name = document.getElementById("car_name");
+const brand = document.getElementById("brand");
+const model = document.getElementById("model");
+const controle = document.getElementById("controle");
+const seated_capacity = document.getElementById("seated_capacity");
+const price = document.getElementById("price");
+const offer = document.getElementById("offer");
+const fine = document.getElementById("fine");
+const pickup = document.getElementById("pickup");
+const dropoff = document.getElementById("dropoff");
+const desc = document.getElementById("desc");
+const owner_name = document.getElementById("owner_name");
+const thumbnail = document.getElementById("thumbnail");
+const images = document.getElementById("images");
+
+
+// ================== GET ID ==================
+const params = new URLSearchParams(window.location.search);
+const carId = params.get("id");
+
+if (!carId) {
+    alert("❌ Car ID missing in URL");
+}
+
+
+// ================== LOAD DATA ==================
+async function loadCar() {
+    try {
+        let res = await fetch(`http://127.0.0.1:8000/api/cars/${carId}/`);
+
+        if (!res.ok) throw new Error("API error");
+
+        let car = await res.json();
+
+        console.log("Car Data:", car);
+
+        car_name.value = car.car_name || "";
+        brand.value = car.brand || "";
+        model.value = car.model || "";
+        controle.value = car.controle || "";
+        seated_capacity.value = car.seated_capacity || "";
+        price.value = car.price_per_day || "";
+        offer.value = car.offer || "";
+        fine.value = car.fine_per_day || "";
+        pickup.value = car.pickup_location || "";
+        dropoff.value = car.dropoff_location || "";
+        desc.value = car.description || "";
+        owner_name.value = car.owner_name || "";
+
+    } catch (err) {
+        console.error(err);
+        alert("❌ Failed to load car data");
+    }
+}
+
+// call load
+if (carId) {
+    loadCar();
+    btn.innerText = "Update Car";
+}
+
+
+// ================== SUBMIT UPDATE ==================
+form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    clearErrors();
+
+    btn.disabled = true;
+    btn.innerText = "Updating...";
+    document.getElementById("loading").innerText = "⏳ Updating...";
+
+    let formData = new FormData();
+
+    formData.append("car_name", car_name.value);
+    formData.append("brand", brand.value);
+    formData.append("model", model.value);
+    formData.append("controle", controle.value);
+    formData.append("seated_capacity", seated_capacity.value);
+    formData.append("price_per_day", price.value);
+    formData.append("offer", offer.value);
+    formData.append("fine_per_day", fine.value);
+    formData.append("pickup_location", pickup.value);
+    formData.append("dropoff_location", dropoff.value);
+    formData.append("description", desc.value);
+    formData.append("owner_name", owner_name.value);
+
+    // optional thumbnail
+    if (thumbnail.files.length > 0) {
+        formData.append("car_thumbnail", thumbnail.files[0]);
+    }
+
+    // multiple images
+    for (let i = 0; i < images.files.length; i++) {
+        formData.append("images", images.files[i]);
+    }
+
+    try {
+        let res = await fetch(`http://127.0.0.1:8000/api/cars/${carId}/`, {
+            method: "PATCH",
+            body: formData
+        });
+
+        let data = await res.json();
+
+        if (!res.ok) {
+            handleErrors(data);
+        } else {
+            document.getElementById("successMsg").innerText = "✅ Car Updated Successfully!";
+
+            // optional redirect
+            setTimeout(() => {
+                window.location.href = "/dashboard.html";
+            }, 1500);
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("❌ Server error");
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Update Car";
+    document.getElementById("loading").innerText = "";
+});
+
+
+// ================== CLEAR ERRORS ==================
+function clearErrors() {
+    document.querySelectorAll(".error").forEach(el => el.innerHTML = "");
+    document.querySelectorAll("input, textarea").forEach(el => el.classList.remove("error-border"));
+    document.getElementById("successMsg").innerHTML = "";
+}
+
+
+// ================== HANDLE ERRORS ==================
+function handleErrors(errors) {
+
+    const fieldMap = {
+        car_name: "car_name",
+        brand: "brand",
+        model: "model",
+        controle: "controle",
+        seated_capacity: "seated_capacity",
+        price_per_day: "price",
+        offer: "offer",
+        fine_per_day: "fine",
+        pickup_location: "pickup",
+        dropoff_location: "dropoff",
+        description: "desc",
+        car_thumbnail: "thumbnail",
+        images: "images",
+        owner_name: "owner_name"
+    };
+
+    for (let field in errors) {
+        let message = errors[field].join(", ");
+
+        if (field === "non_field_errors") {
+            alert(message);
+            continue;
+        }
+
+        let inputId = fieldMap[field];
+
+        if (inputId) {
+            let input = document.getElementById(inputId);
+            input.classList.add("error-border");
+
+            let errorDiv = document.getElementById(inputId + "Error");
+            if (errorDiv) {
+                errorDiv.innerHTML = message;
+            }
+        }
+    }
+}
+
+</script>
+</body>
+</html>
+

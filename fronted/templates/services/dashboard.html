@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f5f7fb;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background: #111827;
+  color: white;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  color: #9ca3af;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.sidebar ul li a:hover {
+  color: white;
+}
+
+/* Main */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Top bar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-add {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-add:hover {
+  background: #2563eb;
+}
+
+/* Stats */
+.stats {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.stat-box {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+}
+
+/* Cars Grid */
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+/* Card */
+.car-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.car-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.btn-edit {
+  background: #10b981;
+  color: white;
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Dashboard</h2>
+    <ul>
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">My Cars</a></li>
+      <li><a href="#">Bookings</a></li>
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main -->
+  <div class="main-content">
+
+    <div class="topbar">
+      <h1>My Cars</h1>
+      <button class="btn btn-add" onclick="addCar()">+ Add Car</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-box">
+        <h3 id="totalCars">0</h3>
+        <p>Total Cars</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="availableCars">0</h3>
+        <p>Available</p>
+      </div>
+      <div class="stat-box">
+        <h3 id="bookedCars">0</h3>
+        <p>Booked</p>
+      </div>
+    </div>
+
+    <!-- Cars -->
+    <div class="cars-grid" id="carsContainer"></div>
+
+  </div>
+</div>
+
+<script>
+
+const container = document.getElementById("carsContainer");
+
+fetch("http://127.0.0.1:8000/api/cars/")
+.then(res => res.json())
+.then(data => {
+
+  const cars = data.results || data;
+
+  let available = 0;
+  let booked = 0;
+
+  container.innerHTML = "";
+
+  cars.forEach(car => {
+
+    if(car.is_booked){
+      booked++;
+    } else {
+      available++;
+    }
+
+    const card = document.createElement("div");
+    card.classList.add("car-card");
+
+    card.innerHTML = `
+      <img src="http://127.0.0.1:8000${car.car_thumbnail}">
+      <div class="card-body">
+        <div class="card-title">${car.car_name}</div>
+        <div>${car.brand} · ₹${car.price_per_day}/day</div>
+
+        <div class="card-actions">
+          <button class="btn btn-edit" onclick="updateCar(${car.id})">Update</button>
+          <button class="btn btn-delete" onclick="deleteCar(${car.id})">Delete</button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  document.getElementById("totalCars").innerText = cars.length;
+  document.getElementById("availableCars").innerText = available;
+  document.getElementById("bookedCars").innerText = booked;
+
+});
+
+
+// Add Car
+function addCar(){
+  window.location.href = "./addcars.html";
+}
+
+// Edit Car
+function updateCar(id){
+  window.location.href = `./updatecar.html?id=${id}`;
+}
+// Delete Car
+function deleteCar(id){
+  if(confirm("Delete this car?")){
+    fetch(`http://127.0.0.1:8000/api/cars/${id}/`, {
+      method: "DELETE"
+    })
+    .then(() => location.reload());
+  }
+}
+
+</script>
+
+</body>
+</html>

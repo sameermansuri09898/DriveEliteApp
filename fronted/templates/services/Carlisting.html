@@ -248,12 +248,9 @@ fetch("http://127.0.0.1:8000/api/cars/")
     const card = document.createElement("div");
     card.className = "card";
 
-    card.onclick = () => {
-      window.location.href = `./services/viewpage.html?id=${car.id}`;
-    };
 
     card.innerHTML = `
-    <div class="image-box">
+    <div class="image-box" onclick="goToDetail(${car.id})">
       <img class="car-img" src="${car.car_thumbnail}" />
       <div class="badge ${car.is_available ? 'available' : 'booked'}">
         ${car.is_available ? 'Available' : 'Booked'}
@@ -290,6 +287,11 @@ fetch("http://127.0.0.1:8000/api/cars/")
     container.appendChild(card);
   });
 });
+
+function goToDetail(id){
+    console.log(id)
+    window.location.href = `./viewpage.html?id=${id}`;
+  }
 </script>
 
 </body>
