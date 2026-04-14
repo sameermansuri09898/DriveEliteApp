@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import Car,CarImage
+from product.models import Car,CarImage,Booking
 
 class CarImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -42,3 +42,22 @@ class CarSerializer(serializers.ModelSerializer):
     def get_discount(self, obj):
         return obj.discount()    
  
+class BookingSerializer(serializers.ModelSerializer):
+    final_booking_price = serializers.SerializerMethodField()
+    class Meta:
+        model = Booking
+        fields = ['id','car','user','start_date','end_date','total_price','final_booking_price']
+
+    def validate(self, attrs):
+        car = attrs['car']
+        start_date = attrs['start_date']
+        end_date = attrs['end_date']
+        if car.is_available(start_date, end_date):
+            raise serializers.ValidationError("Car is not available for the selected dates")
+        return attrs
+
+    def get_final_booking_price(self, obj):
+        return obj.total_price()    
+
+    def create(self, validated_data):
+        return Booking.objects.create(**validated_data)    

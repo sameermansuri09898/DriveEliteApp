@@ -7,18 +7,10 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from product.productserializer import BookingSerializer
 
 class CarList(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication] 
-    action_permissions = {
-        'list': [IsAuthenticated],
-        'retrieve': [IsAuthenticated],
-        'create': [IsAuthenticated],
-        'update': [IsAuthenticated],
-        'partial_update': [IsAuthenticated],
-        'destroy': [IsAuthenticated],
-    }
+
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
@@ -90,3 +82,17 @@ class Carlistproto(generics.ListAPIView):
 class RetrieveCarView(generics.RetrieveAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
+
+class BookingView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    def post(self,request):
+        print(request.data)
+        serializer=BookingSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            car=Car.objects.get(id=request.data['car'])
+            car.is_available=False
+            car.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

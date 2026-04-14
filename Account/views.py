@@ -4,9 +4,10 @@ from rest_framework import status
 from Account.Registrationserial import UserRegistrationSerializer, LoginSerializer 
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token 
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 
 class RegistrationView(APIView):
+  permission_classes=[AllowAny]
   def post(self,request):
     serializer=UserRegistrationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -15,6 +16,7 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
+  permission_classes=[AllowAny]
   def post(self,request):
     serializer=LoginSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)

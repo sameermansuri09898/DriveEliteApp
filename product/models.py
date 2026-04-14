@@ -37,8 +37,6 @@ class Car(models.Model):
       return self.price_per_day - self.perday_offer_price()
 
     
-
-
 class CarImage(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='car_images/')
@@ -48,17 +46,21 @@ class CarImage(models.Model):
 
 
 
-# class Booking(models.Model):
-#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     start_date = models.DateField()
-#     end_date = models.DateField()
-#     total_price = models.FloatField(default=0)
-#     status = models.CharField(max_length=100, default='pending')
-#     payment_status = models.CharField(max_length=100, default='pending')
-#     payment_id = models.CharField(max_length=100, default='pending')
-#     payment_signature = models.CharField(max_length=100, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     def __str__(self):
-#         return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
+class Booking(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    total_price = models.FloatField(default=0)
+    status = models.CharField(max_length=100, default='pending')
+    payment_status = models.CharField(max_length=100, default='pending')
+    payment_id = models.CharField(max_length=100, default='pending')
+    payment_signature = models.CharField(max_length=100, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
+
+    def total_price(self):
+       return self.car.perday_offer_price() * (self.end_date - self.start_date).days
+     
