@@ -15,6 +15,7 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ['id','car_name','brand','model','price_per_day','car_thumbnail','description','pickup_location','dropoff_location','offer','fine_per_day','final_price','discount','images','is_available','owner_name','controle','seated_capacity']
+        read_only_fields = ['user'] 
 
     def get_final_price(self, obj):
         return obj.perday_offer_price()

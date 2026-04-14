@@ -190,7 +190,11 @@ body {
 
 const container = document.getElementById("carsContainer");
 
-fetch("http://127.0.0.1:8000/api/cars/")
+fetch("http://127.0.0.1:8000/api/carslist/",{
+  headers:{
+    "Authorization": `Token ${localStorage.getItem("token")}`
+  }
+})
 .then(res => res.json())
 .then(data => {
 
@@ -219,6 +223,7 @@ fetch("http://127.0.0.1:8000/api/cars/")
         <div>${car.brand} · ₹${car.price_per_day}/day</div>
 
         <div class="card-actions">
+          <button class="btn btn-edit" onclick="viewCar(${car.id})">View</button>
           <button class="btn btn-edit" onclick="updateCar(${car.id})">Update</button>
           <button class="btn btn-delete" onclick="deleteCar(${car.id})">Delete</button>
         </div>
@@ -253,7 +258,9 @@ function deleteCar(id){
     .then(() => location.reload());
   }
 }
-
+function viewCar(id){
+  window.location.href = `./viewpage.html?id=${id}`;
+}
 </script>
 
 </body>

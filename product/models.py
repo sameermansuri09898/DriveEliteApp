@@ -2,8 +2,10 @@ from django.db import models
 from django.conf import settings
 from Account.models import CustomUser
 # Create your models here.
+from django.contrib.auth.models import User
 
 class Car(models.Model):
+    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
     car_name = models.CharField(max_length=100)
     brand = models.CharField(max_length=100)
     model = models.CharField(max_length=100)
@@ -23,7 +25,7 @@ class Car(models.Model):
 
 
     def __str__(self):
-        return f"{self.name} - {self.brand} - {self.model}"
+        return f"{self.car_name} - {self.brand} - {self.model}"
 
     def perday_offer_price(self):
       return self.price_per_day - (self.price_per_day * self.offer / 100)

@@ -4,8 +4,21 @@ from product.productserializer import CarSerializer,CarImageSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 class CarList(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication] 
+    action_permissions = {
+        'list': [IsAuthenticated],
+        'retrieve': [IsAuthenticated],
+        'create': [IsAuthenticated],
+        'update': [IsAuthenticated],
+        'partial_update': [IsAuthenticated],
+        'destroy': [IsAuthenticated],
+    }
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
@@ -60,16 +73,18 @@ class CarList(viewsets.ModelViewSet):
         instance.delete()   
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class carlist(generics.ListAPIView):
-    queryset = Car.objects.all()
-    serializer_class = CarSerializer
-
+class carlist(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self,request):
+        car=Car.objects.filter(user=request.user)
+        serializer=CarSerializer(car,many=True)
+        return Response(serializer.data)
 
 class Carlistproto(generics.ListAPIView):
     serializer_class = CarSerializer
 
     def get_queryset(self):
-        return Car.objects.order_by('-id')[:8]
+        return Car.objects.order_by('-id')[:9]
 
 
 class RetrieveCarView(generics.RetrieveAPIView):
