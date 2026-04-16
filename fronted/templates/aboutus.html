@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Us - Car Rental</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: #fff;
+}
+
+/* HERO */
+.hero {
+    height: 60vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+                url('https://images.unsplash.com/photo-1503376780353-7e6692767b70');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 50px;
+}
+
+.hero p {
+    margin-top: 10px;
+    color: #ccc;
+}
+
+/* ABOUT */
+.about {
+    padding: 60px 10%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    align-items: center;
+}
+
+.about img {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+}
+
+.about-text {
+    max-width: 500px;
+}
+
+.about-text h2 {
+    margin-bottom: 15px;
+}
+
+.about-text p {
+    color: #aaa;
+    line-height: 1.6;
+}
+
+/* FEATURES */
+.features {
+    padding: 60px 10%;
+    text-align: center;
+}
+
+.features h2 {
+    margin-bottom: 40px;
+}
+
+.feature-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.card {
+    background: #1e293b;
+    padding: 25px;
+    border-radius: 10px;
+    width: 250px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    background: #334155;
+}
+
+/* STATS */
+.stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 50px;
+    background: #020617;
+    text-align: center;
+}
+
+.stats h3 {
+    font-size: 30px;
+}
+
+/* TEAM */
+.team {
+    padding: 60px 10%;
+    text-align: center;
+}
+
+.team-box {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.member {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.member img {
+    width: 100%;
+    border-radius: 50%;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #020617;
+    color: #aaa;
+}
+</style>
+
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <div>
+        <h1>About Our Car Rental</h1>
+        <p>Drive your journey with comfort & style</p>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+    <img src="https://images.unsplash.com/photo-1549924231-f129b911e442" alt="car">
+    <div class="about-text">
+        <h2>Who We Are</h2>
+        <p>
+            We are a premium car rental service providing top-quality vehicles at affordable prices.
+            Whether you need a car for a trip, business, or daily use, we ensure a smooth and hassle-free experience.
+        </p>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <h2>Why Choose Us</h2>
+    <div class="feature-box">
+        <div class="card">🚗 Wide Range of Cars</div>
+        <div class="card">💰 Affordable Pricing</div>
+        <div class="card">⚡ Fast Booking</div>
+        <div class="card">📍 Multiple Locations</div>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+    <div>
+        <h3>500+</h3>
+        <p>Cars Available</p>
+    </div>
+    <div>
+        <h3>10K+</h3>
+        <p>Happy Customers</p>
+    </div>
+    <div>
+        <h3>24/7</h3>
+        <p>Support</p>
+    </div>
+</section>
+
+<!-- TEAM -->
+<section class="team">
+    <h2>Meet Our Team</h2>
+    <div class="team-box">
+        <div class="member">
+            <img src="https://randomuser.me/api/portraits/men/32.jpg">
+            <h4>John</h4>
+            <p>CEO</p>
+        </div>
+        <div class="member">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg">
+            <h4>Sarah</h4>
+            <p>Manager</p>
+        </div>
+        <div class="member">
+            <img src="https://randomuser.me/api/portraits/men/65.jpg">
+            <h4>Alex</h4>
+            <p>Support</p>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 Car Rental App | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
