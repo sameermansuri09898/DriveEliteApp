@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Rental Blog</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #0f172a;
+    color: white;
+}
+
+/* HERO */
+.hero {
+    height: 40vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)),
+                url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero h1 {
+    font-size: 45px;
+}
+
+/* BLOG SECTION */
+.blog {
+    padding: 60px 10%;
+}
+
+.blog h2 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.blog-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* CARD */
+.blog-card {
+    background: #1e293b;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    background: #334155;
+}
+
+.blog-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.blog-content {
+    padding: 20px;
+}
+
+.blog-content h3 {
+    margin-bottom: 10px;
+}
+
+.blog-content p {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.blog-content button {
+    margin-top: 15px;
+    padding: 8px 15px;
+    border: none;
+    background: #3b82f6;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.blog-content button:hover {
+    background: #2563eb;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #020617;
+    color: #aaa;
+    margin-top: 40px;
+}
+</style>
+
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+    <h1>Our Blog</h1>
+</section>
+
+<!-- BLOG -->
+<section class="blog">
+    <h2>Latest Articles</h2>
+
+    <div class="blog-container">
+
+        <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1502877338535-766e1452684a">
+            <div class="blog-content">
+                <h3>Top 5 Cars for Road Trips</h3>
+                <p>Discover the best cars for long journeys with comfort and performance.</p>
+                <button>Read More</button>
+            </div>
+        </div>
+
+        <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1511919884226-fd3cad34687c">
+            <div class="blog-content">
+                <h3>How to Choose the Right Rental Car</h3>
+                <p>Tips to select the perfect car for your needs and budget.</p>
+                <button>Read More</button>
+            </div>
+        </div>
+
+        <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1483721310020-03333e577078">
+            <div class="blog-content">
+                <h3>Save Money on Car Rentals</h3>
+                <p>Learn smart ways to reduce your rental costs and get the best deals.</p>
+                <button>Read More</button>
+            </div>
+        </div>
+
+        <div class="blog-card">
+            <img src="https://images.unsplash.com/photo-1493238792000-8113da705763">
+            <div class="blog-content">
+                <h3>Benefits of Renting vs Buying</h3>
+                <p>Understand why renting can sometimes be a smarter option.</p>
+                <button>Read More</button>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 Car Rental Blog | All Rights Reserved</p>
+</footer>
+
+</body>
+</html>
