@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f4f6f9;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 15px;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.cart-item {
+  display: flex;
+  gap: 15px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  align-items: center;
+}
+
+.cart-img {
+  width: 120px;
+  height: 90px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.info {
+  flex: 1;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.price {
+  margin-top: 5px;
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.plus { background: #16a34a; color: #fff; }
+.minus { background: #f59e0b; color: #fff; }
+.remove { background: #dc2626; color: #fff; }
+
+.total-box {
+  margin-top: 20px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.empty {
+  text-align: center;
+  margin-top: 50px;
+  color: #777;
+}
+
+@media(max-width:768px){
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="title">🛒 My Cart</div>
+
+  <div id="cartContainer"></div>
+
+  <div class="total-box">
+    <span>Total</span>
+    <span>₹<span id="grandTotal">0</span></span>
+  </div>
+
+</div>
+
+<script>
+
+const token = localStorage.getItem("token");
+
+if (!token) {
+  alert("Login required");
+}
+
+// 🔥 LOAD CART
+function loadCart() {
+
+  fetch("http://localhost:8000/api/cart/", {
+    headers: {
+      "Authorization": "Token " + token
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+    const container = document.getElementById("cartContainer");
+    container.innerHTML = "";
+
+    let total = 0;
+
+    if (data.length === 0) {
+      container.innerHTML = `<div class="empty">Your cart is empty</div>`;
+      document.getElementById("grandTotal").innerText = 0;
+      return;
+    }
+
+    data.forEach(item => {
+
+      total += item.total_price;
+
+      container.innerHTML += `
+        <div class="cart-item">
+
+          <img src="http://localhost:8000${item.image}" class="cart-img"/>
+
+          <div class="info">
+            <div class="name">${item.car_name} (${item.brand})</div>
+            <div class="price">₹${item.total_price}</div>
+          </div>
+
+          <div class="controls">
+            <button class="btn minus" onclick="updateDays(${item.id}, ${item.days - 1})">-</button>
+            <span>${item.days}</span>
+            <button class="btn plus" onclick="updateDays(${item.id}, ${item.days + 1})">+</button>
+            <button class="btn remove" onclick="removeItem(${item.id})">Delete</button>
+          </div>
+
+        </div>
+      `;
+    });
+
+    document.getElementById("grandTotal").innerText = total;
+
+  })
+  .catch(err => console.error(err));
+}
+
+
+// 🔥 UPDATE DAYS
+function updateDays(id, days) {
+
+  if (days < 1) return;
+
+  fetch(`http://localhost:8000/api/cart/update/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Token " + token
+    },
+    body: JSON.stringify({ days })
+  })
+  .then(() => loadCart());
+}
+
+
+// 🔥 DELETE ITEM
+function removeItem(id) {
+
+  fetch(`http://localhost:8000/api/cart/delete/${id}/`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": "Token " + token
+    }
+  })
+  .then(() => loadCart());
+}
+
+
+// 🚀 INITIAL LOAD
+loadCart();
+
+</script>
+
+</body>
+</html>

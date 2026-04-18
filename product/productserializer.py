@@ -43,14 +43,24 @@ class CarSerializer(serializers.ModelSerializer):
         return obj.discount()    
  
 class CartSerializer(serializers.ModelSerializer):
+    car_name = serializers.CharField(source="car.car_name", read_only=True)
+    brand = serializers.CharField(source="car.brand", read_only=True)
+    image = serializers.ImageField(source="car.car_thumbnail", read_only=True)
+
+
     class Meta:
         model = CarCart
-        fields = '__all__'
+        fields = [
+            'id',
+            'car',
+            'car_name',
+            'brand',
+            'image',
+            'days',
+            'total_price'
+        ]
 
     def validate_days(self, value):
         if value < 1:
             raise serializers.ValidationError("Days must be greater than 0")
-        return value    
-
-    def create(self, validated_data):
-        return CarCart.objects.create(**validated_data)    
+        return value
