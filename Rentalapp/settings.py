@@ -14,21 +14,24 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+from decouple import config
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ek6@$vjyzne%5jm=swf*s1quojfzl2sam^huloi8&zav8447up'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+SECRET_KEY = config('SECRET_KEY')
+
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+Test_Key_ID=config('Test_Key_ID')
+Test_Key_Secret=config('Test_Key_Secret')
 
-# Application definition
+
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',

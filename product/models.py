@@ -36,7 +36,7 @@ class Car(models.Model):
     def discount(self):
       return self.price_per_day - self.perday_offer_price()
 
-    
+    # for multiple images
 class CarImage(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='car_images/')
@@ -58,24 +58,20 @@ class CarCart(models.Model):
   def __str__(self):
     return f"{self.car.name} - {self.user.username} - {self.total_price} - {self.days}"  
 
-# class Booking(models.Model):
-#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     total_price = models.FloatField(default=0)
-#     status = models.CharField(max_length=100, default='pending')
-#     payment_status = models.CharField(max_length=100, default='pending')
-#     Razorpay_order_id = models.CharField(max_length=100, default='pending')
-#     Razorpay_payment_id = models.CharField(max_length=100, default='pending')
-#     Razorpay_payment_signature = models.CharField(max_length=100, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     def __str__(self):
-#         return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
+class Booking(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    total_price = models.FloatField(default=0)
+    status = models.CharField(max_length=100, default='pending')
+    payment_status = models.CharField(max_length=100, default='pending')
+    Razorpay_order_id = models.CharField(max_length=100, default='pending')
+    Razorpay_payment_id = models.CharField(max_length=100, default='pending')
+    Razorpay_payment_signature = models.CharField(max_length=100, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
-#     def total_price(self):
-#        return self.car.perday_offer_price() * (self.end_date - self.start_date).days
-     
-#     def is_booking_available(self):
-#       return self.is_available
+    def __str__(self):
+        return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
+
 
     
