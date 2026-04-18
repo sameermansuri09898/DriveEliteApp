@@ -236,58 +236,71 @@ body {
 
 <script>
 fetch("http://127.0.0.1:8000/api/cars/")
-.then(res => res.json())
+.then(res => {
+  if (!res.ok) {
+    throw new Error("API Error: " + res.status);
+  }
+  return res.json();
+})
 .then(data => {
+
+  console.log("API DATA:", data);
+
+  if (!Array.isArray(data)) {
+    console.error("Not an array:", data);
+    return;
+  }
 
   const container = document.getElementById("cars");
 
   data.forEach(car => {
-
     const newPrice = car.price_per_day - (car.price_per_day * car.offer / 100);
 
     const card = document.createElement("div");
     card.className = "card";
 
-
     card.innerHTML = `
-    <div class="image-box" onclick="goToDetail(${car.id})">
-      <img class="car-img" src="${car.car_thumbnail}" />
-      <div class="badge ${car.is_available ? 'available' : 'booked'}">
-        ${car.is_available ? 'Available' : 'Booked'}
-      </div>
-    </div>
-
-    <div class="card-body">
-      <div class="title">${car.car_name}</div>
-      <div class="sub">${car.brand} • ${car.model}</div>
-
-      <div class="tags">
-        <div class="tag">🚗 ${car.seated_capacity} Seats</div>
-        <div class="tag">⚙️ ${car.controle}</div>
-        <div class="tag">📍 ${car.pickup_location}</div>
-      </div>
-
-      <div class="owner">
-        <div class="avatar">${car.owner_name ? car.owner_name[0] : 'U'}</div>
-        <div>${car.owner_name || "Unknown"}</div>
-      </div>
-
-      <div class="price-box">
-        <div>
-          <div class="price">₹${newPrice.toFixed(0)}</div>
-          <div class="old-price">₹${car.price_per_day}</div>
+      <div class="image-box" onclick="goToDetail(${car.id})">
+        <img class="car-img" src="${car.car_thumbnail}" />
+        <div class="badge ${car.is_available ? 'available' : 'booked'}">
+          ${car.is_available ? 'Available' : 'Booked'}
         </div>
-        <div class="discount">${car.offer}% OFF</div>
       </div>
 
-      <button class="btn">View Details</button>
-    </div>
+      <div class="card-body">
+        <div class="title">${car.car_name}</div>
+        <div class="sub">${car.brand} • ${car.model}</div>
+
+        <div class="tags">
+          <div class="tag">🚗 ${car.seated_capacity} Seats</div>
+          <div class="tag">⚙️ ${car.controle}</div>
+          <div class="tag">📍 ${car.pickup_location}</div>
+        </div>
+
+        <div class="owner">
+          <div class="avatar">${car.owner_name ? car.owner_name[0] : 'U'}</div>
+          <div>${car.owner_name || "Unknown"}</div>
+        </div>
+
+        <div class="price-box">
+          <div>
+            <div class="price">₹${newPrice.toFixed(0)}</div>
+            <div class="old-price">₹${car.price_per_day}</div>
+          </div>
+          <div class="discount">${car.offer}% OFF</div>
+        </div>
+
+        <button class="btn" onclick="goToDetail(${car.id})">View Details</button>
+      </div>
     `;
 
     container.appendChild(card);
   });
-});
 
+})
+.catch(err => {
+  console.error("ERROR:", err);
+});
 function goToDetail(id){
     console.log(id)
     window.location.href = `./viewpage.html?id=${id}`;

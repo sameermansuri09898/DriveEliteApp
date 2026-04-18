@@ -306,7 +306,10 @@ form.addEventListener("submit", async function(e){
     try {
         let res = await fetch("http://127.0.0.1:8000/api/cars/", {
             method: "POST",
-            body: formData
+            body: formData,
+            headers: {
+                "Authorization": "Token " + localStorage.getItem("token")
+            }
         });
 
         let data = await res.json();

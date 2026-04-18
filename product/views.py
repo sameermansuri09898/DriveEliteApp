@@ -8,24 +8,29 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from product.productserializer import CartSerializer
+from rest_framework.decorators import action
 
 class CarList(viewsets.ModelViewSet):
-
+    
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
     # ✅ CREATE
     def create(self, request, *args, **kwargs):
-        images = request.FILES.getlist('images')
+     images = request.FILES.getlist('images')
 
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        car = serializer.save()
+     serializer = self.get_serializer(data=request.data)
+     serializer.is_valid(raise_exception=True)
 
-        for img in images:
-            CarImage.objects.create(car=car, image=img)
+    # 🔥 FIX: user assign karo
+     car = serializer.save()
+     car.user = request.user
+     car.save()
 
-        return Response(self.get_serializer(car).data, status=status.HTTP_201_CREATED)
+     for img in images:
+         CarImage.objects.create(car=car, image=img)
+
+     return Response(self.get_serializer(car).data, status=status.HTTP_201_CREATED)
 
     # ✅ UPDATE (PUT)
     def update(self, request, *args, **kwargs):
@@ -65,12 +70,14 @@ class CarList(viewsets.ModelViewSet):
         instance.delete()   
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class carlist(APIView):
+class Usercar(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     def get(self,request):
         car=Car.objects.filter(user=request.user)
         serializer=CarSerializer(car,many=True)
         return Response(serializer.data)
+
 
 class Carlistproto(generics.ListAPIView):
     serializer_class = CarSerializer
@@ -137,11 +144,45 @@ class AddtoCartView(APIView):
         }, status=201)
 
 
-class CartView(APIView):
+class CartView(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    def get(self, request):
+    def list(self, request):
         cart = CarCart.objects.filter(user=request.user)
         serializer = CartSerializer(cart, many=True)
         return Response(serializer.data)
+
+    def destroy(self,request,pk=None):
+        try:
+            cart=CarCart.objects.get(id=pk)
+            cart.delete()
+            return Response({"message": "Car removed from cart"}, status=200)
+        except CarCart.DoesNotExist:
+            return Response({"error": "Car not found"}, status=404)
+
+    def update(self,request,pk=None):
+        try:
+            cart=CarCart.objects.get(id=pk,user=request.user)
+            days=request.data.get('days')
+
+            try:
+             if days < 1:
+                 return Response({"error": "Invalid days"}, status=400)
+
+            except ValueError:
+                return Response({"error": "Invalid days"}, status=400)
+
+            cart.days=int(days)    
+            cart.total_price=cart.car.perday_offer_price()*cart.days
+            cart.save()
+            return Response({
+            "message": "Cart updated successfully",
+            "days": cart.days,
+            "total_price": cart.total_price
+            }, status=200)  
+
+        except CarCart.DoesNotExist:
+            return Response({"error": "Car not found"}, status=404)        
+
+

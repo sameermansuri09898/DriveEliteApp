@@ -46,8 +46,7 @@ class CartSerializer(serializers.ModelSerializer):
     car_name = serializers.CharField(source="car.car_name", read_only=True)
     brand = serializers.CharField(source="car.brand", read_only=True)
     image = serializers.ImageField(source="car.car_thumbnail", read_only=True)
-
-
+    
     class Meta:
         model = CarCart
         fields = [

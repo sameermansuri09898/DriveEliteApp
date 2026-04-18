@@ -1,15 +1,18 @@
 from rest_framework.routers import DefaultRouter
-from product.views import CarList,carlist,RetrieveCarView,Carlistproto,AddtoCartView,CartView
+from product.views import CarList,RetrieveCarView,Carlistproto,AddtoCartView,CartView,Usercar
+
 from django.urls import path
 
 router = DefaultRouter()
-router.register('cars', CarList)
+router.register(r'cars', CarList,basename='cars')
+router.register(r'cart', CartView, basename='cart')
 
 urlpatterns = router.urls
+
 urlpatterns += [
-    path('carslist/', carlist.as_view()),
+    path('usercar/', Usercar.as_view()),
     path('carsretreave/<int:pk>/', RetrieveCarView.as_view()),
     path('carslistproto/', Carlistproto.as_view()),
     path('add-to-cart/', AddtoCartView.as_view()),
-    path('cart/', CartView.as_view()),
+    
 ]

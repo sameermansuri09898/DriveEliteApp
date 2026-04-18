@@ -190,13 +190,14 @@ body {
 
 const container = document.getElementById("carsContainer");
 
-fetch("http://127.0.0.1:8000/api/carslist/",{
+fetch("http://127.0.0.1:8000/api/usercar/",{
   headers:{
     "Authorization": `Token ${localStorage.getItem("token")}`
   }
 })
 .then(res => res.json())
 .then(data => {
+  console.log(data);
 
   const cars = data.results || data;
 
@@ -205,34 +206,33 @@ fetch("http://127.0.0.1:8000/api/carslist/",{
 
   container.innerHTML = "";
 
-  cars.forEach(car => {
+cars.forEach(car => {
 
-    if(car.is_booked){
-      booked++;
-    } else {
-      available++;
-    }
+  if(car.is_available){
+    available++;
+  } else {
+    booked++;
+  }
 
-    const card = document.createElement("div");
-    card.classList.add("car-card");
+  const card = document.createElement("div");
+  card.classList.add("car-card");
 
-    card.innerHTML = `
-      <img src="http://127.0.0.1:8000${car.car_thumbnail}">
-      <div class="card-body">
-        <div class="card-title">${car.car_name}</div>
-        <div>${car.brand} · ₹${car.price_per_day}/day</div>
+  card.innerHTML = `
+    <img src="http://127.0.0.1:8000${car.car_thumbnail}">
+    <div class="card-body">
+      <div class="card-title">${car.car_name}</div>
+      <div>${car.brand} · ₹${car.price_per_day}/day</div>
 
-        <div class="card-actions">
-          <button class="btn btn-edit" onclick="viewCar(${car.id})">View</button>
-          <button class="btn btn-edit" onclick="updateCar(${car.id})">Update</button>
-          <button class="btn btn-delete" onclick="deleteCar(${car.id})">Delete</button>
-        </div>
+      <div class="card-actions">
+        <button class="btn btn-edit" onclick="viewCar(${car.id})">View</button>
+        <button class="btn btn-edit" onclick="updateCar(${car.id})">Update</button>
+        <button class="btn btn-delete" onclick="deleteCar(${car.id})">Delete</button>
       </div>
-    `;
+    </div>
+  `;
 
-    container.appendChild(card);
-  });
-
+  container.appendChild(card);
+});
   document.getElementById("totalCars").innerText = cars.length;
   document.getElementById("availableCars").innerText = available;
   document.getElementById("bookedCars").innerText = booked;
@@ -253,7 +253,10 @@ function updateCar(id){
 function deleteCar(id){
   if(confirm("Delete this car?")){
     fetch(`http://127.0.0.1:8000/api/cars/${id}/`, {
-      method: "DELETE"
+      method: "DELETE",
+      headers: {
+        "Authorization": "Token " + localStorage.getItem("token")
+      }
     })
     .then(() => location.reload());
   }
