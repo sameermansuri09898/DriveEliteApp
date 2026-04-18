@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from product.models import Car,CarImage
+from product.models import Car,CarImage,CarCart
 from product.productserializer import CarSerializer,CarImageSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,7 +7,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from product.productserializer import BookingSerializer
+from product.productserializer import CartSerializer
 
 class CarList(viewsets.ModelViewSet):
 
@@ -83,16 +83,65 @@ class RetrieveCarView(generics.RetrieveAPIView):
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
-class BookingView(APIView):
+
+class AddtoCartView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
-    def post(self,request):
-        print(request.data)
-        serializer=BookingSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user)
-            car=Car.objects.get(id=request.data['car'])
-            car.is_available=False
-            car.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+
+        car_id = request.data.get('car')
+        days = int(request.data.get('days', 1))
+
+        # ❌ invalid days
+        if days < 1:
+            return Response({"error": "Invalid days"}, status=400)
+
+        # ✅ car exist check
+        try:
+            car = Car.objects.get(id=car_id)
+        except Car.DoesNotExist:
+            return Response({"error": "Car not found"}, status=404)
+
+        if not car.is_available:
+            return Response({"error": "Car not available"}, status=400)
+
+        price_per_day = car.perday_offer_price()
+        total_price = price_per_day * days
+
+        
+        item, created = CarCart.objects.get_or_create(
+            user=request.user,
+            car=car,
+            defaults={
+                'days': days,
+                'total_price': total_price
+            }
+        )
+
+        if not created:
+            item.days = days
+            item.total_price = price_per_day * item.days
+            item.save()
+
+            return Response({
+                "message": "Cart updated",
+                "days": item.days,
+                "total_price": item.total_price
+            }, status=200)
+
+        return Response({
+            "message": "Car added to cart",
+            "days": item.days,
+            "total_price": item.total_price
+        }, status=201)
+
+
+class CartView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get(self, request):
+        cart = CarCart.objects.filter(user=request.user)
+        serializer = CartSerializer(cart, many=True)
+        return Response(serializer.data)

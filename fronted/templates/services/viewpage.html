@@ -202,8 +202,17 @@ body {
         <div class="avatar" id="avatar"></div>
         <div id="owner"></div>
       </div>
+      <div class="days-count" style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+        <div class="days">
+          <label for="days">Days Book:</label>
+        <input type="number" id="days" name="days" min="1" max="30" value="" style="border: 1px solid #ccc; padding: 5px; border-radius: 5px; font-size: medium;" oninput="totalprice()"></div>
+       <div class="total_price" style="align-items: center;">
+        <h1 style="font-size: medium;" id="livetotalprice"></h1>
+       </div>
+      </div>
 
       <button class="btn" id="bookBtn">Book Now</button>
+      <button class="btn" id="addcartBtn" onclick="addtocart()">Add To Cart</button>
     </div>
   </div>
 
@@ -219,16 +228,25 @@ body {
 </div>
 
 <script>
+
 const id = new URLSearchParams(window.location.search).get("id");
 
+// 🔥 GLOBAL STATE
+let priceproduct = 0;
+let selected_days = 1;
+
+// 🚗 FETCH CAR DATA
 fetch(`http://127.0.0.1:8000/api/cars/${id}/`)
 .then(res => res.json())
 .then(car => {
 
   const newPrice = car.price_per_day - (car.price_per_day * car.offer / 100);
 
-  document.getElementById("mainImage").src = car.car_thumbnail;
+  // ✅ SET PRICE
+  priceproduct = newPrice;
 
+  // UI DATA
+  document.getElementById("mainImage").src = car.car_thumbnail;
   document.getElementById("title").innerText = `${car.car_name} - ${car.brand}`;
   document.getElementById("model").innerText = car.model;
 
@@ -255,7 +273,7 @@ fetch(`http://127.0.0.1:8000/api/cars/${id}/`)
     <p><strong>Created:</strong> ${car.created_at}</p>
   `;
 
-  // MULTIPLE IMAGES
+  // 🖼 IMAGES
   const thumbnails = document.getElementById("thumbnails");
 
   if (car.images && car.images.length > 0) {
@@ -269,7 +287,7 @@ fetch(`http://127.0.0.1:8000/api/cars/${id}/`)
     thumbnails.innerHTML = `<img src="${car.car_thumbnail}" onclick="changeImage('${car.car_thumbnail}')">`;
   }
 
-  // BUTTON STATE
+  // ❌ Disable button if not available
   const btn = document.getElementById("bookBtn");
   if (!car.is_available) {
     btn.innerText = "Not Available";
@@ -277,12 +295,17 @@ fetch(`http://127.0.0.1:8000/api/cars/${id}/`)
     btn.style.background = "#ccc";
   }
 
+  // 🔥 INITIAL TOTAL
+  totalprice();
+
 });
 
+// 🖼 CHANGE IMAGE
 function changeImage(src) {
   document.getElementById("mainImage").src = src;
 }
 
+// 📑 TAB SWITCH
 function showTab(tabId, element) {
   document.getElementById('details').style.display = 'none';
   document.getElementById('extra').style.display = 'none';
@@ -291,7 +314,58 @@ function showTab(tabId, element) {
   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
   element.classList.add('active');
 }
-</script>
 
+// 💰 TOTAL PRICE CALCULATION
+function totalprice() {
+  selected_days = Number(document.getElementById("days").value);
+
+  if (!selected_days || selected_days < 1) {
+    selected_days = 1;
+    document.getElementById("days").value = 1;
+  }
+
+  const total = selected_days * priceproduct;
+
+  document.getElementById("livetotalprice").innerText = `₹${total}`;
+}
+
+// 🛒 ADD TO CART
+function addtocart() {
+
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    alert('⚠️ Please login first');
+    return;
+  }
+
+  fetch('http://localhost:8000/api/add-to-cart/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Token ' + token
+    },
+    body: JSON.stringify({
+      car: id,                // ✅ correct
+      days: selected_days     // ✅ correct
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data);
+
+    if (data.message) {
+      alert("✅ " + data.message);
+    } else {
+      alert("❌ " + data.error);
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Something went wrong");
+  });
+}
+
+</script>
 </body>
 </html>

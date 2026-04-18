@@ -44,23 +44,38 @@ class CarImage(models.Model):
     def __str__(self):
         return f"Image for {self.car.name}"
 
+class CarCart(models.Model):
+  user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null=True)
+  car=models.ForeignKey(Car, on_delete=models.CASCADE,null=True)
+  total_price=models.FloatField(default=0)
+  days=models.IntegerField(default=0)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  total_price=models.FloatField(default=0)
 
 
-class Booking(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    total_price = models.FloatField(default=0)
-    status = models.CharField(max_length=100, default='pending')
-    payment_status = models.CharField(max_length=100, default='pending')
-    payment_id = models.CharField(max_length=100, default='pending')
-    payment_signature = models.CharField(max_length=100, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
 
-    def total_price(self):
-       return self.car.perday_offer_price() * (self.end_date - self.start_date).days
+  def __str__(self):
+    return f"{self.car.name} - {self.user.username} - {self.total_price} - {self.days}"  
+
+# class Booking(models.Model):
+#     car = models.ForeignKey(Car, on_delete=models.CASCADE)
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#     total_price = models.FloatField(default=0)
+#     status = models.CharField(max_length=100, default='pending')
+#     payment_status = models.CharField(max_length=100, default='pending')
+#     Razorpay_order_id = models.CharField(max_length=100, default='pending')
+#     Razorpay_payment_id = models.CharField(max_length=100, default='pending')
+#     Razorpay_payment_signature = models.CharField(max_length=100, default='pending')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     def __str__(self):
+#         return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
+
+#     def total_price(self):
+#        return self.car.perday_offer_price() * (self.end_date - self.start_date).days
      
+#     def is_booking_available(self):
+#       return self.is_available
+
+    
