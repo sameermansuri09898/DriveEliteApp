@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import Car,CarImage,CarCart
+from product.models import Car,CarImage,CarCart,Payment
 
 class CarImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,3 +63,9 @@ class CartSerializer(serializers.ModelSerializer):
         if value < 1:
             raise serializers.ValidationError("Days must be greater than 0")
         return value
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = ['id','car','user','total_price','status','created_at','updated_at']        

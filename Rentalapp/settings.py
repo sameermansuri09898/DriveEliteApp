@@ -25,12 +25,11 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-Test_Key_ID=config('Test_Key_ID')
-Test_Key_Secret=config('Test_Key_Secret')
+ALLOWED_HOSTS = ["*"]
 
 
+RAZORPAY_KEY_ID = 'rzp_test_SenrKCmnjk9rKh'
+RAZORPAY_KEY_SECRET = '3vy24B9ED7A3Bc4dxEWgRIrU'
 
 
 INSTALLED_APPS = [

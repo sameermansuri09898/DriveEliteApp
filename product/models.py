@@ -58,8 +58,8 @@ class CarCart(models.Model):
   def __str__(self):
     return f"{self.car.name} - {self.user.username} - {self.total_price} - {self.days}"  
 
-class Booking(models.Model):
-    car = models.ForeignKey(Car, on_delete=models.CASCADE)
+class Payment(models.Model):
+    car = models.ForeignKey(Car, on_delete=models.CASCADE,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     total_price = models.FloatField(default=0)
     status = models.CharField(max_length=100, default='pending')
@@ -71,7 +71,7 @@ class Booking(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.car.name} - {self.user.username} - {self.start_date} - {self.end_date}"
+        return f"{self.car.name} - {self.user.username} - {self.total_price} - {self.payment_status}"
 
 
     

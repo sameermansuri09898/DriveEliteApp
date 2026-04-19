@@ -9,6 +9,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from product.productserializer import CartSerializer
 from rest_framework.decorators import action
+import razorpay
+from django.conf import settings
+from product.models import Payment
 
 class CarList(viewsets.ModelViewSet):
     
@@ -185,4 +188,58 @@ class CartView(viewsets.ViewSet):
         except CarCart.DoesNotExist:
             return Response({"error": "Car not found"}, status=404)        
 
+class totalmoneybyuser(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    def get(self,request):
+        cart=CarCart.objects.filter(user=request.user)
+        total_price=0
+        for item in cart:
+            total_price+=item.total_price
+        print(total_price)    
+        return Response({"total_price": total_price})
 
+
+class CreateOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def post(self, request):
+        cart_items = CarCart.objects.filter(user=request.user)
+        total_price = sum(item.total_price for item in cart_items)
+
+        if total_price <= 0:
+            return Response({"error": "Cart is empty"}, status=400)
+
+        client = razorpay.Client(
+            auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET)
+        )
+
+        try:
+            order = client.order.create({
+                "amount": int(total_price * 100),  # paise
+                "currency": "INR",
+                "payment_capture": 1,
+                "receipt": f"order_rcptid_{request.user.id}",
+                "notes": {
+                    "user_id": request.user.id
+                }
+            })
+            print("Razorpay Order:", order)  # check terminal
+
+        except Exception as e:
+            print("Razorpay Error:", str(e))  # ✅ see exact error
+            return Response({"error": str(e)}, status=500)
+
+        Payment.objects.create(
+            user=request.user,
+            Razorpay_order_id=order['id'],
+            total_price=total_price,
+            status="created"
+        )
+
+        return Response({
+         "id": order['id'],
+         "amount": order['amount'],
+         "currency": order['currency']
+})
